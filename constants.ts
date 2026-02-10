@@ -627,55 +627,55 @@ export const HYMNS: Hymn[] = [
     tags: ["Grace", "Salvation", "Testimony"]
   },
   {
-      id: "psalm-23",
-      title: "The King of Love My Shepherd Is",
-      author: "Henry Baker",
-      date: "1868",
-      description: "A beautiful paraphrase of Psalm 23.",
-      tags: ["Psalm", "Comfort", "Jesus"]
+    id: "psalm-23",
+    title: "The King of Love My Shepherd Is",
+    author: "Henry Baker",
+    date: "1868",
+    description: "A beautiful paraphrase of Psalm 23.",
+    tags: ["Psalm", "Comfort", "Jesus"]
   },
   {
-      id: "mighty-fortress",
-      title: "A Mighty Fortress Is Our God",
-      author: "Martin Luther",
-      date: "1529",
-      description: "The battle hymn of the Reformation.",
-      tags: ["Reformation", "Protection", "God's Power"]
+    id: "mighty-fortress",
+    title: "A Mighty Fortress Is Our God",
+    author: "Martin Luther",
+    date: "1529",
+    description: "The battle hymn of the Reformation.",
+    tags: ["Reformation", "Protection", "God's Power"]
   },
   {
-      id: "be-thou-my-vision",
-      title: "Be Thou My Vision",
-      author: "Dallan Forgaill",
-      date: "6th Century",
-      description: "An ancient Irish hymn prayer for God's guidance.",
-      tags: ["Prayer", "Guidance", "Ancient"]
+    id: "be-thou-my-vision",
+    title: "Be Thou My Vision",
+    author: "Dallan Forgaill",
+    date: "6th Century",
+    description: "An ancient Irish hymn prayer for God's guidance.",
+    tags: ["Prayer", "Guidance", "Ancient"]
   },
   {
-      id: "come-thou-fount",
-      title: "Come Thou Fount of Every Blessing",
-      author: "Robert Robinson",
-      date: "1758",
-      description: "A prayer acknowledging our proneness to wander and God's keeping grace.",
-      tags: ["Grace", "Perseverance", "Prayer"]
+    id: "come-thou-fount",
+    title: "Come Thou Fount of Every Blessing",
+    author: "Robert Robinson",
+    date: "1758",
+    description: "A prayer acknowledging our proneness to wander and God's keeping grace.",
+    tags: ["Grace", "Perseverance", "Prayer"]
   }
 ];
 
 export const THEOLOGICAL_TOPICS: string[] = [
-    "Justification by Faith Alone",
-    "The Trinity",
-    "The Hypostatic Union",
-    "Original Sin",
-    "Limited Atonement",
-    "Unconditional Election",
-    "The Covenant of Grace",
-    "Sanctification",
-    "The Perseverance of the Saints",
-    "Sola Scriptura",
-    "Divine Providence",
-    "The Canon of Scripture",
-    "The Image of God",
-    "Effectual Calling",
-    "Adoption"
+  "Justification by Faith Alone",
+  "The Trinity",
+  "The Hypostatic Union",
+  "Original Sin",
+  "Limited Atonement",
+  "Unconditional Election",
+  "The Covenant of Grace",
+  "Sanctification",
+  "The Perseverance of the Saints",
+  "Sola Scriptura",
+  "Divine Providence",
+  "The Canon of Scripture",
+  "The Image of God",
+  "Effectual Calling",
+  "Adoption"
 ];
 
 export const DOCTRINAL_CONNECTIONS: DoctrinalConnection[] = [
@@ -756,6 +756,22 @@ const belgicArticles = [
   "The Sacraments", "Holy Baptism", "The Holy Supper of Our Lord Jesus Christ", "The Magistrates", "The Last Judgment"
 ];
 
+// Apostles' Creed Articles
+const apostlesCreedArticles = [
+  "I. I believe in God the Father Almighty, Maker of heaven and earth.",
+  "II. And in Jesus Christ his only Son our Lord;",
+  "III. Who was conceived by the Holy Ghost, Born of the Virgin Mary;",
+  "IV. Suffered under Pontius Pilate, Was crucified, dead, and buried;",
+  "V. He descended into hell; The third day he rose again from the dead;",
+  "VI. He ascended into heaven, And sitteth on the right hand of God the Father Almighty;",
+  "VII. From thence he shall come to judge the quick and the dead.",
+  "VIII. I believe in the Holy Ghost;",
+  "IX. The holy Catholic Church; The Communion of Saints;",
+  "X. The Forgiveness of sins;",
+  "XI. The Resurrection of the body;",
+  "XII. And the Life everlasting. Amen."
+];
+
 // Titles for Second Helvetic Confession Chapters
 const secondHelveticChapters = [
   "Of the Holy Scripture Being the True Word of God", "Of Interpreting the Holy Scripture; and of Fathers, Councils, and Traditions",
@@ -802,94 +818,102 @@ const scotsChapters = [
 // Structure for Institutes of the Christian Religion (Vol 1 & 2 - John Allen 1813)
 // Note: This aligns with the provided text source.
 const institutesStructure = [
-    { header: "Book I: On the Knowledge of God the Creator", chapters: [
-        "Ch 1: Connection Between Knowledge of God and Self",
-        "Ch 2: Nature and Tendency of Knowledge of God",
-        "Ch 3: Human Mind Naturally Endued with Knowledge of God",
-        "Ch 4: This Knowledge Extinguished or Corrupted",
-        "Ch 5: Knowledge of God Conspicuous in Creation",
-        "Ch 6: Guidance of Scripture Necessary",
-        "Ch 7: Testimony of the Spirit Necessary",
-        "Ch 8: Rational Proofs to Establish Scripture",
-        "Ch 9: Fanaticism Discarding Scripture",
-        "Ch 10: Idolatrous Worship Discountenanced",
-        "Ch 11: Unlawfulness of Ascribing Visible Form to God",
-        "Ch 12: God Contradistinguished from Idols",
-        "Ch 13: One Divine Essence, Three Persons",
-        "Ch 14: True God Distinguished by Creation",
-        "Ch 15: State of Man at Creation",
-        "Ch 16: God's Preservation and Government",
-        "Ch 17: Application of Doctrine of Providence",
-        "Ch 18: God Uses Agency of Impious"
-    ]},
-    { header: "Book II: On the Knowledge of God the Redeemer", chapters: [
-        "Ch 1: Fall and Defection of Adam",
-        "Ch 2: Man Despoiled of Freedom of Will",
-        "Ch 3: Corruption of Human Nature",
-        "Ch 4: Operation of God in Hearts of Men",
-        "Ch 5: Refutation of Objections to Bondage of Will",
-        "Ch 6: Redemption for Lost Man to be Sought in Christ",
-        "Ch 7: The Law Given to Encourage Hope",
-        "Ch 8: Exposition of the Moral Law",
-        "Ch 9: Christ Known Under the Law",
-        "Ch 10: Similarity of Old and New Testaments",
-        "Ch 11: Difference of the Two Testaments",
-        "Ch 12: Necessity of Christ Becoming Man",
-        "Ch 13: Christ's Assumption of Real Humanity",
-        "Ch 14: Union of Two Natures in Mediator",
-        "Ch 15: Consideration of Christ's Three Offices",
-        "Ch 16: Christ's Execution of Redeemer's Office",
-        "Ch 17: Christ Merited Grace and Salvation"
-    ]},
-    { header: "Book III: On Receiving the Grace of Christ", chapters: [
-        "Ch 1: Things Declared Concerning Christ",
-        "Ch 2: Faith Defined",
-        "Ch 3: On Repentance",
-        "Ch 4: Sophistry of Schools on Repentance",
-        "Ch 5: Indulgences and Purgatory",
-        "Ch 6: The Life of a Christian",
-        "Ch 7: Summary of Christian Life",
-        "Ch 8: Bearing the Cross",
-        "Ch 9: Meditation on Future Life",
-        "Ch 10: Right Use of Present Life",
-        "Ch 11: Justification by Faith Defined",
-        "Ch 12: Consideration of Divine Tribunal",
-        "Ch 13: Two Things Observed in Gratuitous Justification",
-        "Ch 14: Commencement & Progress of Justification",
-        "Ch 15: Boasting Subversive of God's Glory",
-        "Ch 16: Refutation of Papist Calumnies",
-        "Ch 17: Harmony of Law and Gospel Promises",
-        "Ch 18: Justification from Works as inferred from Reward",
-        "Ch 19: Christian Liberty",
-        "Ch 20: Prayer",
-        "Ch 21: Eternal Election",
-        "Ch 22: Testimonies of Scripture on Election",
-        "Ch 23: Refutation of Calumnies on Election",
-        "Ch 24: Election Confirmed by God's Call",
-        "Ch 25: Final Resurrection"
-    ]},
-    { header: "Book IV: On the External Means of Salvation", chapters: [
-        "Ch 1: True Church with which we must maintain Unity",
-        "Ch 2: Comparison between True and False Church",
-        "Ch 3: Teachers and Ministers of the Church",
-        "Ch 4: State of the Ancient Church",
-        "Ch 5: Ancient Form subverted by Papal Tyranny",
-        "Ch 6: Primacy of the Romish See",
-        "Ch 7: Rise and Progress of Papal Power",
-        "Ch 8: Power of the Church in Articles of Faith",
-        "Ch 9: Councils and their Authority",
-        "Ch 10: Power of Legislation in the Church",
-        "Ch 11: Jurisdiction of the Church & its Abuse",
-        "Ch 12: Discipline of the Church (Censures & Fasting)",
-        "Ch 13: Vows",
-        "Ch 14: Sacraments",
-        "Ch 15: Baptism",
-        "Ch 16: Pædobaptism",
-        "Ch 17: Lord's Supper & its Benefits",
-        "Ch 18: Papal Mass as a Sacrilege",
-        "Ch 19: Five Other Sacraments (Falsely so called)",
-        "Ch 20: Civil Government"
-    ]}
+  {
+    header: "Book I: On the Knowledge of God the Creator", chapters: [
+      "Ch 1: Connection Between Knowledge of God and Self",
+      "Ch 2: Nature and Tendency of Knowledge of God",
+      "Ch 3: Human Mind Naturally Endued with Knowledge of God",
+      "Ch 4: This Knowledge Extinguished or Corrupted",
+      "Ch 5: Knowledge of God Conspicuous in Creation",
+      "Ch 6: Guidance of Scripture Necessary",
+      "Ch 7: Testimony of the Spirit Necessary",
+      "Ch 8: Rational Proofs to Establish Scripture",
+      "Ch 9: Fanaticism Discarding Scripture",
+      "Ch 10: Idolatrous Worship Discountenanced",
+      "Ch 11: Unlawfulness of Ascribing Visible Form to God",
+      "Ch 12: God Contradistinguished from Idols",
+      "Ch 13: One Divine Essence, Three Persons",
+      "Ch 14: True God Distinguished by Creation",
+      "Ch 15: State of Man at Creation",
+      "Ch 16: God's Preservation and Government",
+      "Ch 17: Application of Doctrine of Providence",
+      "Ch 18: God Uses Agency of Impious"
+    ]
+  },
+  {
+    header: "Book II: On the Knowledge of God the Redeemer", chapters: [
+      "Ch 1: Fall and Defection of Adam",
+      "Ch 2: Man Despoiled of Freedom of Will",
+      "Ch 3: Corruption of Human Nature",
+      "Ch 4: Operation of God in Hearts of Men",
+      "Ch 5: Refutation of Objections to Bondage of Will",
+      "Ch 6: Redemption for Lost Man to be Sought in Christ",
+      "Ch 7: The Law Given to Encourage Hope",
+      "Ch 8: Exposition of the Moral Law",
+      "Ch 9: Christ Known Under the Law",
+      "Ch 10: Similarity of Old and New Testaments",
+      "Ch 11: Difference of the Two Testaments",
+      "Ch 12: Necessity of Christ Becoming Man",
+      "Ch 13: Christ's Assumption of Real Humanity",
+      "Ch 14: Union of Two Natures in Mediator",
+      "Ch 15: Consideration of Christ's Three Offices",
+      "Ch 16: Christ's Execution of Redeemer's Office",
+      "Ch 17: Christ Merited Grace and Salvation"
+    ]
+  },
+  {
+    header: "Book III: On Receiving the Grace of Christ", chapters: [
+      "Ch 1: Things Declared Concerning Christ",
+      "Ch 2: Faith Defined",
+      "Ch 3: On Repentance",
+      "Ch 4: Sophistry of Schools on Repentance",
+      "Ch 5: Indulgences and Purgatory",
+      "Ch 6: The Life of a Christian",
+      "Ch 7: Summary of Christian Life",
+      "Ch 8: Bearing the Cross",
+      "Ch 9: Meditation on Future Life",
+      "Ch 10: Right Use of Present Life",
+      "Ch 11: Justification by Faith Defined",
+      "Ch 12: Consideration of Divine Tribunal",
+      "Ch 13: Two Things Observed in Gratuitous Justification",
+      "Ch 14: Commencement & Progress of Justification",
+      "Ch 15: Boasting Subversive of God's Glory",
+      "Ch 16: Refutation of Papist Calumnies",
+      "Ch 17: Harmony of Law and Gospel Promises",
+      "Ch 18: Justification from Works as inferred from Reward",
+      "Ch 19: Christian Liberty",
+      "Ch 20: Prayer",
+      "Ch 21: Eternal Election",
+      "Ch 22: Testimonies of Scripture on Election",
+      "Ch 23: Refutation of Calumnies on Election",
+      "Ch 24: Election Confirmed by God's Call",
+      "Ch 25: Final Resurrection"
+    ]
+  },
+  {
+    header: "Book IV: On the External Means of Salvation", chapters: [
+      "Ch 1: True Church with which we must maintain Unity",
+      "Ch 2: Comparison between True and False Church",
+      "Ch 3: Teachers and Ministers of the Church",
+      "Ch 4: State of the Ancient Church",
+      "Ch 5: Ancient Form subverted by Papal Tyranny",
+      "Ch 6: Primacy of the Romish See",
+      "Ch 7: Rise and Progress of Papal Power",
+      "Ch 8: Power of the Church in Articles of Faith",
+      "Ch 9: Councils and their Authority",
+      "Ch 10: Power of Legislation in the Church",
+      "Ch 11: Jurisdiction of the Church & its Abuse",
+      "Ch 12: Discipline of the Church (Censures & Fasting)",
+      "Ch 13: Vows",
+      "Ch 14: Sacraments",
+      "Ch 15: Baptism",
+      "Ch 16: Pædobaptism",
+      "Ch 17: Lord's Supper & its Benefits",
+      "Ch 18: Papal Mass as a Sacrilege",
+      "Ch 19: Five Other Sacraments (Falsely so called)",
+      "Ch 20: Civil Government"
+    ]
+  }
 ];
 
 
@@ -897,114 +921,180 @@ export const getConfessionNavigation = (confession: Confession): NavItem[] => {
   const items: NavItem[] = [];
 
   if (confession.id === 'westminster-confession') {
-     wcfChapters.forEach((title, idx) => {
-         items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `WCF ${idx + 1}` });
-     });
+    wcfChapters.forEach((title, idx) => {
+      items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `WCF ${idx + 1}` });
+    });
   } else if (confession.id === 'westminster-shorter') {
-      items.push({ label: "I. God & Decrees (Q. 1-12)", reference: "WSC Q.1", isHeader: true });
-      items.push({ label: "Introduction (Q. 1-3)", reference: "WSC Q.1" });
-      items.push({ label: "God & Trinity (Q. 4-6)", reference: "WSC Q.4" });
-      items.push({ label: "Decrees & Creation (Q. 7-12)", reference: "WSC Q.7" });
-      
-      items.push({ label: "II. Sin & The Fall (Q. 13-20)", reference: "WSC Q.13", isHeader: true });
-      items.push({ label: "Sin & Fall (Q. 13-19)", reference: "WSC Q.13" });
-      items.push({ label: "Election (Q. 20)", reference: "WSC Q.20" });
+    items.push({ label: "I. God & Decrees (Q. 1-12)", reference: "WSC Q. 1-12", isHeader: true });
+    items.push({ label: "Introduction (Q. 1-3)", reference: "WSC Q. 1-3" });
+    items.push({ label: "God & Trinity (Q. 4-6)", reference: "WSC Q. 4-6" });
+    items.push({ label: "Decrees & Creation (Q. 7-12)", reference: "WSC Q. 7-12" });
 
-      items.push({ label: "III. Christ our Redeemer (Q. 21-28)", reference: "WSC Q.21", isHeader: true });
-      items.push({ label: "Christ's Person (Q. 21-22)", reference: "WSC Q.21" });
-      items.push({ label: "Christ's Offices (Q. 23-26)", reference: "WSC Q.23" });
-      items.push({ label: "Humiliation & Exaltation (Q. 27-28)", reference: "WSC Q.27" });
+    items.push({ label: "II. Sin & The Fall (Q. 13-20)", reference: "WSC Q. 13-20", isHeader: true });
+    items.push({ label: "Sin & Fall (Q. 13-19)", reference: "WSC Q. 13-19" });
+    items.push({ label: "Election (Q. 20)", reference: "WSC Q. 20" });
 
-      items.push({ label: "IV. Application of Redemption (Q. 29-38)", reference: "WSC Q.29", isHeader: true });
-      items.push({ label: "Effectual Calling (Q. 29-31)", reference: "WSC Q.29" });
-      items.push({ label: "Benefits in this Life (Q. 32-36)", reference: "WSC Q.32" });
-      items.push({ label: "Benefits at Death & Resurrection (Q. 37-38)", reference: "WSC Q.37" });
+    items.push({ label: "III. Christ our Redeemer (Q. 21-28)", reference: "WSC Q. 21-28", isHeader: true });
+    items.push({ label: "Christ's Person (Q. 21-22)", reference: "WSC Q. 21-22" });
+    items.push({ label: "Christ's Offices (Q. 23-26)", reference: "WSC Q. 23-26" });
+    items.push({ label: "Humiliation & Exaltation (Q. 27-28)", reference: "WSC Q. 27-28" });
 
-      items.push({ label: "V. The Moral Law (Q. 39-81)", reference: "WSC Q.39", isHeader: true });
-      items.push({ label: "Duty of Man (Q. 39-42)", reference: "WSC Q.39" });
-      items.push({ label: "Ten Commandments (Q. 43-81)", reference: "WSC Q.43" });
+    items.push({ label: "IV. Application of Redemption (Q. 29-38)", reference: "WSC Q. 29-38", isHeader: true });
+    items.push({ label: "Effectual Calling (Q. 29-31)", reference: "WSC Q. 29-31" });
+    items.push({ label: "Benefits in this Life (Q. 32-36)", reference: "WSC Q. 32-36" });
+    items.push({ label: "Benefits at Death & Resurrection (Q. 37-38)", reference: "WSC Q. 37-38" });
 
-      items.push({ label: "VI. Faith & Repentance (Q. 82-87)", reference: "WSC Q.82", isHeader: true });
-      
-      items.push({ label: "VII. Means of Grace (Q. 88-97)", reference: "WSC Q.88", isHeader: true });
-      items.push({ label: "Word (Q. 89-90)", reference: "WSC Q.89" });
-      items.push({ label: "Sacraments (Q. 91-97)", reference: "WSC Q.91" });
+    items.push({ label: "V. The Moral Law (Q. 39-81)", reference: "WSC Q. 39-81", isHeader: true });
+    items.push({ label: "Duty of Man (Q. 39-42)", reference: "WSC Q. 39-42" });
+    items.push({ label: "Ten Commandments (Q. 43-81)", reference: "WSC Q. 43-81" });
 
-      items.push({ label: "VIII. The Lord's Prayer (Q. 98-107)", reference: "WSC Q.98", isHeader: true });
-      
+    items.push({ label: "VI. Faith & Repentance (Q. 82-87)", reference: "WSC Q. 82-87", isHeader: true });
+
+    items.push({ label: "VII. Means of Grace (Q. 88-97)", reference: "WSC Q. 88-97", isHeader: true });
+    items.push({ label: "Word (Q. 89-90)", reference: "WSC Q. 89-90" });
+    items.push({ label: "Sacraments (Q. 91-97)", reference: "WSC Q. 91-97" });
+
+    items.push({ label: "VIII. The Lord's Prayer (Q. 98-107)", reference: "WSC Q. 98-107", isHeader: true });
+
   } else if (confession.id === 'westminster-larger') {
-      items.push({ label: "I. Introduction (Q. 1-5)", reference: "WLC Q.1", isHeader: true });
-      items.push({ label: "II. God & The Trinity (Q. 6-11)", reference: "WLC Q.6", isHeader: true });
-      items.push({ label: "III. Decrees & Creation (Q. 12-20)", reference: "WLC Q.12", isHeader: true });
-      items.push({ label: "IV. The Fall (Q. 21-29)", reference: "WLC Q.21", isHeader: true });
-      items.push({ label: "V. The Covenant of Grace (Q. 30-35)", reference: "WLC Q.30", isHeader: true });
-      items.push({ label: "VI. Christ the Mediator (Q. 36-56)", reference: "WLC Q.36", isHeader: true });
-      items.push({ label: "VII. Application of Redemption (Q. 57-90)", reference: "WLC Q.57", isHeader: true });
-      items.push({ label: "VIII. The Moral Law (Q. 91-149)", reference: "WLC Q.91", isHeader: true });
-      items.push({ label: "IX. Means of Grace (Q. 154-196)", reference: "WLC Q.154", isHeader: true });
+    items.push({ label: "I. Introduction (Q. 1-5)", reference: "WLC Q. 1-5", isHeader: true });
+    items.push({ label: "Q. 1-5: Man's Chief End & Scope of Scripture", reference: "WLC Q. 1-5" });
+
+    items.push({ label: "II. God & The Trinity (Q. 6-11)", reference: "WLC Q. 6-11", isHeader: true });
+    items.push({ label: "Q. 6-11: Nature of God & The Trinity", reference: "WLC Q. 6-11" });
+
+    items.push({ label: "III. Decrees & Creation (Q. 12-20)", reference: "WLC Q. 12-20", isHeader: true });
+    items.push({ label: "Q. 12-14: God's Decrees", reference: "WLC Q. 12-14" });
+    items.push({ label: "Q. 15-17: Creation & Angels", reference: "WLC Q. 15-17" });
+    items.push({ label: "Q. 18-20: Creation of Man & Providence", reference: "WLC Q. 18-20" });
+
+    items.push({ label: "IV. The Fall (Q. 21-29)", reference: "WLC Q. 21-29", isHeader: true });
+    items.push({ label: "Q. 21-26: The Fall & Sin", reference: "WLC Q. 21-26" });
+    items.push({ label: "Q. 27-29: Misery of the Fall", reference: "WLC Q. 27-29" });
+
+    items.push({ label: "V. The Covenant of Grace (Q. 30-35)", reference: "WLC Q. 30-35", isHeader: true });
+    items.push({ label: "Q. 30-35: God's Covenant with Man", reference: "WLC Q. 30-35" });
+
+    items.push({ label: "VI. Christ the Mediator (Q. 36-56)", reference: "WLC Q. 36-56", isHeader: true });
+    items.push({ label: "Q. 36-42: Person & Natures of Christ", reference: "WLC Q. 36-42" });
+    items.push({ label: "Q. 43-45: Christ's Offices", reference: "WLC Q. 43-45" });
+    items.push({ label: "Q. 46-50: Christ's Humiliation", reference: "WLC Q. 46-50" });
+    items.push({ label: "Q. 51-56: Christ's Exaltation", reference: "WLC Q. 51-56" });
+
+    items.push({ label: "VII. Application of Redemption (Q. 57-90)", reference: "WLC Q. 57-90", isHeader: true });
+    items.push({ label: "Q. 57-60: The Church & Special Grace", reference: "WLC Q. 57-60" });
+    items.push({ label: "Q. 61-65: The Visible & Invisible Church", reference: "WLC Q. 61-65" });
+    items.push({ label: "Q. 66-69: Union & Communion with Christ", reference: "WLC Q. 66-69" });
+    items.push({ label: "Q. 70-73: Justification", reference: "WLC Q. 70-73" });
+    items.push({ label: "Q. 74: Adoption", reference: "WLC Q. 74" });
+    items.push({ label: "Q. 75-78: Sanctification & Repentance", reference: "WLC Q. 75-78" });
+    items.push({ label: "Q. 79-81: Perseverance & Assurance", reference: "WLC Q. 79-81" });
+    items.push({ label: "Q. 82-90: Benefits at Death & Last Judgment", reference: "WLC Q. 82-90" });
+
+    items.push({ label: "VIII. The Moral Law (Q. 91-149)", reference: "WLC Q. 91-149", isHeader: true });
+    items.push({ label: "Q. 91-97: Duty & The Law", reference: "WLC Q. 91-97" });
+    items.push({ label: "Q. 98-121: The First Table (1-4)", reference: "WLC Q. 98-121" });
+    items.push({ label: "Q. 122-148: The Second Table (5-10)", reference: "WLC Q. 122-148" });
+    items.push({ label: "Q. 149-153: Aggravations of Sin", reference: "WLC Q. 149-153" });
+
+    items.push({ label: "IX. Means of Grace (Q. 154-196)", reference: "WLC Q. 154-196", isHeader: true });
+    items.push({ label: "Q. 155-160: The Word of God", reference: "WLC Q. 155-160" });
+    items.push({ label: "Q. 161-177: The Sacraments", reference: "WLC Q. 161-177" });
+    items.push({ label: "Q. 178-185: Nature of Prayer", reference: "WLC Q. 178-185" });
+    items.push({ label: "Q. 186-196: The Lord's Prayer", reference: "WLC Q. 186-196" });
   } else if (confession.id === 'heidelberg') {
-      items.push({ label: "Introduction", reference: "Heidelberg LD 1", isHeader: true });
-      items.push({ label: "Lord's Day 1: Comfort", reference: "Heidelberg LD 1" });
-      
-      items.push({ label: "Part I: Misery (LD 2-4)", reference: "Heidelberg LD 2", isHeader: true });
-      items.push({ label: "LD 2: The Law", reference: "Heidelberg LD 2" });
-      items.push({ label: "LD 3: The Fall", reference: "Heidelberg LD 3" });
-      items.push({ label: "LD 4: Punishment", reference: "Heidelberg LD 4" });
-      
-      items.push({ label: "Part II: Deliverance (LD 5-31)", reference: "Heidelberg LD 5", isHeader: true });
-      items.push({ label: "LD 5-8: The Mediator", reference: "Heidelberg LD 5" });
-      items.push({ label: "God the Father (LD 9-10)", reference: "Heidelberg LD 9", isHeader: true });
-      items.push({ label: "God the Son (LD 11-19)", reference: "Heidelberg LD 11", isHeader: true });
-      items.push({ label: "God the Spirit (LD 20-24)", reference: "Heidelberg LD 20", isHeader: true });
-      items.push({ label: "Sacraments (LD 25-31)", reference: "Heidelberg LD 25", isHeader: true });
-      
-      items.push({ label: "Part III: Gratitude (LD 32-52)", reference: "Heidelberg LD 32", isHeader: true });
-      items.push({ label: "Ten Commandments (LD 34-44)", reference: "Heidelberg LD 34", isHeader: true });
-      items.push({ label: "Lord's Prayer (LD 45-52)", reference: "Heidelberg LD 45", isHeader: true });
+    items.push({ label: "Introduction", reference: "Heidelberg LD 1", isHeader: true });
+    items.push({ label: "Lord's Day 1: Comfort", reference: "Heidelberg LD 1" });
+
+    items.push({ label: "Part I: Misery (LD 2-4)", reference: "Heidelberg LD 2", isHeader: true });
+    items.push({ label: "LD 2: The Law", reference: "Heidelberg LD 2" });
+    items.push({ label: "LD 3: The Fall", reference: "Heidelberg LD 3" });
+    items.push({ label: "LD 4: Punishment", reference: "Heidelberg LD 4" });
+
+    items.push({ label: "Part II: Deliverance (LD 5-31)", reference: "Heidelberg LD 5", isHeader: true });
+    items.push({ label: "LD 5-8: The Mediator", reference: "Heidelberg LD 5" });
+    items.push({ label: "God the Father (LD 9-10)", reference: "Heidelberg LD 9", isHeader: true });
+    items.push({ label: "God the Son (LD 11-19)", reference: "Heidelberg LD 11", isHeader: true });
+    items.push({ label: "God the Spirit (LD 20-24)", reference: "Heidelberg LD 20", isHeader: true });
+    items.push({ label: "Sacraments (LD 25-31)", reference: "Heidelberg LD 25", isHeader: true });
+
+    items.push({ label: "Part III: Gratitude (LD 32-52)", reference: "Heidelberg LD 32", isHeader: true });
+    items.push({ label: "Ten Commandments (LD 34-44)", reference: "Heidelberg LD 34", isHeader: true });
+    items.push({ label: "Lord's Prayer (LD 45-52)", reference: "Heidelberg LD 45", isHeader: true });
   } else if (confession.id === 'belgic') {
-      belgicArticles.forEach((title, idx) => {
-          items.push({ label: `Art. ${idx + 1}: ${title}`, reference: `Belgic Confession Art. ${idx + 1}` });
-      });
+    belgicArticles.forEach((title, idx) => {
+      items.push({ label: `Art. ${idx + 1}: ${title}`, reference: `Belgic Confession Art. ${idx + 1}` });
+    });
   } else if (confession.id === 'canons-dort') {
-      items.push({ label: "First Head: Divine Election", reference: "Canons of Dort Head 1" });
-      items.push({ label: "Second Head: Christ's Death", reference: "Canons of Dort Head 2" });
-      items.push({ label: "Third & Fourth Heads: Corruption & Conversion", reference: "Canons of Dort Head 3" });
-      items.push({ label: "Fifth Head: Perseverance", reference: "Canons of Dort Head 5" });
+    items.push({ label: "First Head: Divine Election", reference: "Canons of Dort Head 1", isHeader: true });
+    for (let i = 1; i <= 18; i++) {
+      items.push({ label: `Article ${i}`, reference: `Canons of Dort Head 1 Art ${i}` });
+    }
+    items.push({ label: "Rejection of Errors I", reference: "Canons of Dort Head 1 Rejection", isHeader: true });
+    items.push({ label: "Click to View Errors", reference: "Canons of Dort Head 1 Rejection" });
+
+    items.push({ label: "Second Head: Christ's Death", reference: "Canons of Dort Head 2", isHeader: true });
+    for (let i = 1; i <= 9; i++) {
+      items.push({ label: `Article ${i}`, reference: `Canons of Dort Head 2 Art ${i}` });
+    }
+    items.push({ label: "Rejection of Errors II", reference: "Canons of Dort Head 2 Rejection", isHeader: true });
+    items.push({ label: "Click to View Errors", reference: "Canons of Dort Head 2 Rejection" });
+
+    items.push({ label: "Third & Fourth Heads: Corruption & Conversion", reference: "Canons of Dort Head 3", isHeader: true });
+    for (let i = 1; i <= 17; i++) {
+      items.push({ label: `Article ${i}`, reference: `Canons of Dort Head 3 Art ${i}` });
+    }
+    items.push({ label: "Rejection of Errors III/IV", reference: "Canons of Dort Head 3 Rejection", isHeader: true });
+    items.push({ label: "Click to View Errors", reference: "Canons of Dort Head 3 Rejection" });
+
+    items.push({ label: "Fifth Head: Perseverance", reference: "Canons of Dort Head 5", isHeader: true });
+    for (let i = 1; i <= 15; i++) {
+      items.push({ label: `Article ${i}`, reference: `Canons of Dort Head 5 Art ${i}` });
+    }
+    items.push({ label: "Rejection of Errors V", reference: "Canons of Dort Head 5 Rejection", isHeader: true });
+    items.push({ label: "Click to View Errors", reference: "Canons of Dort Head 5 Rejection" });
+
+    items.push({ label: "Conclusion", reference: "Canons of Dort Conclusion", isHeader: true });
+    items.push({ label: "Conclusion & Final Judgment", reference: "Canons of Dort Conclusion" });
+  } else if (confession.id === 'apostles-creed') {
+    apostlesCreedArticles.forEach((text, idx) => {
+      items.push({ label: `Article ${idx + 1}`, reference: `Apostles' Creed Article ${idx + 1}` });
+    });
   } else if (confession.id === 'second-helvetic') {
-      secondHelveticChapters.forEach((title, idx) => {
-        items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `Second Helvetic Confession Ch. ${idx + 1}` });
-      });
+    secondHelveticChapters.forEach((title, idx) => {
+      items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `Second Helvetic Confession Ch. ${idx + 1}` });
+    });
   } else if (confession.id === 'scots-confession') {
-      scotsChapters.forEach((title, idx) => {
-          items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `The Scots Confession Ch. ${idx + 1}` });
-      });
+    scotsChapters.forEach((title, idx) => {
+      items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `The Scots Confession Ch. ${idx + 1}` });
+    });
   } else if (confession.id === '1689-london') {
-      lbcfChapters.forEach((title, idx) => {
-          items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `1689 LBCF ${idx + 1}` });
-      });
+    lbcfChapters.forEach((title, idx) => {
+      items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `1689 LBCF ${idx + 1}` });
+    });
   } else if (confession.id === 'valley-of-vision') {
-      items.push({ label: "Introduction", reference: "The Valley of Vision", isHeader: true });
-      items.push({ label: "The Valley of Vision (Titular Prayer)", reference: "The Valley of Vision prayer 'The Valley of Vision'" });
-      items.push({ label: "I. Father, Son, and Holy Spirit", reference: "The Valley of Vision section 'Father, Son, and Holy Spirit'" });
-      items.push({ label: "II. Redemption and Reconciliation", reference: "The Valley of Vision section 'Redemption and Reconciliation'" });
-      items.push({ label: "III. Penitence and Deprecation", reference: "The Valley of Vision section 'Penitence and Deprecation'" });
-      items.push({ label: "IV. Needs and Devotions", reference: "The Valley of Vision section 'Needs and Devotions'" });
-      items.push({ label: "V. Holy Aspirations", reference: "The Valley of Vision section 'Holy Aspirations'" });
-      items.push({ label: "VI. Approach to God", reference: "The Valley of Vision section 'Approach to God'" });
-      items.push({ label: "VII. Gifts of Grace", reference: "The Valley of Vision section 'Gifts of Grace'" });
-      items.push({ label: "VIII. Service and Ministry", reference: "The Valley of Vision section 'Service and Ministry'" });
-      items.push({ label: "IX. Valediction", reference: "The Valley of Vision section 'Valediction'" });
-      items.push({ label: "X. A Week's Prayers", reference: "The Valley of Vision section 'A Week's Prayers'" });
+    items.push({ label: "Introduction", reference: "The Valley of Vision", isHeader: true });
+    items.push({ label: "The Valley of Vision (Titular Prayer)", reference: "The Valley of Vision prayer 'The Valley of Vision'" });
+    items.push({ label: "I. Father, Son, and Holy Spirit", reference: "The Valley of Vision section 'Father, Son, and Holy Spirit'" });
+    items.push({ label: "II. Redemption and Reconciliation", reference: "The Valley of Vision section 'Redemption and Reconciliation'" });
+    items.push({ label: "III. Penitence and Deprecation", reference: "The Valley of Vision section 'Penitence and Deprecation'" });
+    items.push({ label: "IV. Needs and Devotions", reference: "The Valley of Vision section 'Needs and Devotions'" });
+    items.push({ label: "V. Holy Aspirations", reference: "The Valley of Vision section 'Holy Aspirations'" });
+    items.push({ label: "VI. Approach to God", reference: "The Valley of Vision section 'Approach to God'" });
+    items.push({ label: "VII. Gifts of Grace", reference: "The Valley of Vision section 'Gifts of Grace'" });
+    items.push({ label: "VIII. Service and Ministry", reference: "The Valley of Vision section 'Service and Ministry'" });
+    items.push({ label: "IX. Valediction", reference: "The Valley of Vision section 'Valediction'" });
+    items.push({ label: "X. A Week's Prayers", reference: "The Valley of Vision section 'A Week's Prayers'" });
   } else if (confession.id === 'institutes') {
-      institutesStructure.forEach((book, bookIdx) => {
-          items.push({ label: book.header, reference: `Institutes Book ${bookIdx + 1}`, isHeader: true });
-          book.chapters.forEach((chap, chIdx) => {
-              const chNum = chap.match(/Ch (\d+)/)?.[1];
-              items.push({ label: chap, reference: `Institutes ${bookIdx + 1}.${chNum}` });
-          });
+    institutesStructure.forEach((book, bookIdx) => {
+      items.push({ label: book.header, reference: `Institutes Book ${bookIdx + 1}`, isHeader: true });
+      book.chapters.forEach((chap, chIdx) => {
+        const chNum = chap.match(/Ch (\d+)/)?.[1];
+        items.push({ label: chap, reference: `Institutes ${bookIdx + 1}.${chNum}` });
       });
+    });
   } else {
-      items.push({ label: "Read Document", reference: `${confession.shortTitle}` });
+    items.push({ label: "Read Document", reference: `${confession.shortTitle}` });
   }
 
   return items;
