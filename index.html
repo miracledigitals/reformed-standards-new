@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reformed Standards - Theological Assistant</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Merriweather', 'serif'],
+            display: ['Cinzel', 'serif'],
+          },
+          colors: {
+            reformed: {
+              50: '#fbf7f5',
+              100: '#f5ebe6',
+              200: '#ead6ce',
+              300: '#dbb6a8',
+              400: '#c68e7b',
+              500: '#b36b55',
+              600: '#9a523e',
+              700: '#804031',
+              800: '#6a362c',
+              900: '#582f28',
+              950: '#2f1713',
+            }
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      background-color: #fbf7f5;
+      /* reformed-50 */
+      color: #2f1713;
+      /* reformed-950 */
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .dark body {
+      background-color: #2f1713;
+      /* reformed-950 */
+      color: #f5ebe6;
+      /* reformed-100 */
+    }
+
+    /* Custom scrollbar for a cleaner look */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f5ebe6;
+    }
+
+    .dark ::-webkit-scrollbar-track {
+      background: #582f28;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #dbb6a8;
+      border-radius: 4px;
+    }
+
+    .dark ::-webkit-scrollbar-thumb {
+      background: #9a523e;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #c68e7b;
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */
+    }
+  </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react-markdown": "https://aistudiocdn.com/react-markdown@^10.1.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
+  }
+}
+</script>
+</head>
+
+<body
+  class="antialiased bg-reformed-50 text-reformed-950 dark:bg-reformed-950 dark:text-reformed-100 transition-colors duration-300">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>
