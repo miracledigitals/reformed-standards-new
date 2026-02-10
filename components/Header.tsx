@@ -27,8 +27,8 @@ const NavButton: React.FC<NavButtonProps> = ({ isActive, onClick, icon, label })
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
     className={`p-2 xl:px-3 xl:py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center group shrink-0 relative overflow-hidden ${isActive
-        ? 'bg-reformed-800 text-white shadow-sm ring-1 ring-reformed-700/50'
-        : 'text-reformed-50 hover:bg-reformed-100 dark:text-reformed-300 dark:hover:bg-reformed-800 dark:hover:text-white'
+      ? 'bg-reformed-800 text-white shadow-sm ring-1 ring-reformed-700/50'
+      : 'text-reformed-50 hover:bg-reformed-100 dark:text-reformed-300 dark:hover:bg-reformed-800 dark:hover:text-white'
       }`}
     title={label}
   >
@@ -128,9 +128,7 @@ export const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, theme,
     }
   ] as const;
 
-  const Divider = () => (
-    <div className="w-px h-6 bg-reformed-200 dark:bg-reformed-700 mx-2 shrink-0 self-center"></div>
-  );
+
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 dark:bg-reformed-950/80 backdrop-blur-xl text-reformed-900 dark:text-reformed-50 shadow-sm border-b border-reformed-200 dark:border-reformed-800 transition-all duration-300">
@@ -210,23 +208,7 @@ export const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, theme,
               <Search className="w-5 h-5" />
             </motion.button>
 
-            {/* Desktop Navigation (Horizontal List) */}
-            <nav className="hidden lg:flex items-center space-x-1">
-              {navGroups.map((group, groupIdx) => (
-                <React.Fragment key={group.label}>
-                  {group.items.map(item => (
-                    <NavButton
-                      key={item.id}
-                      isActive={activeView === item.id}
-                      onClick={() => onViewChange(item.id as any)}
-                      icon={<item.icon className="w-5 h-5 lg:w-4 lg:h-4" />}
-                      label={item.label}
-                    />
-                  ))}
-                  {groupIdx < navGroups.length - 1 && <Divider />}
-                </React.Fragment>
-              ))}
-            </nav>
+
 
             {/* Mobile Navigation (Dropdown) */}
             <div className="lg:hidden relative" ref={menuRef}>
@@ -234,8 +216,8 @@ export const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, theme,
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-sm font-bold shadow-sm border transition-all ${isMobileMenuOpen
-                    ? 'bg-reformed-800 text-white border-reformed-800'
-                    : 'bg-white dark:bg-reformed-900 text-reformed-700 dark:text-reformed-200 border-reformed-200 dark:border-reformed-700'
+                  ? 'bg-reformed-800 text-white border-reformed-800'
+                  : 'bg-white dark:bg-reformed-900 text-reformed-700 dark:text-reformed-200 border-reformed-200 dark:border-reformed-700'
                   }`}
               >
                 <span>{getActiveLabel()}</span>
@@ -270,8 +252,8 @@ export const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, theme,
                                     setIsMobileMenuOpen(false);
                                   }}
                                   className={`w-full flex items-center justify-between px-2 py-2 rounded-lg text-sm font-medium transition-colors ${isActive
-                                      ? 'bg-reformed-50 dark:bg-reformed-800 text-reformed-900 dark:text-reformed-100'
-                                      : 'text-reformed-600 dark:text-reformed-400 hover:bg-reformed-50 dark:hover:bg-reformed-800 hover:text-reformed-900 dark:hover:text-reformed-200'
+                                    ? 'bg-reformed-50 dark:bg-reformed-800 text-reformed-900 dark:text-reformed-100'
+                                    : 'text-reformed-600 dark:text-reformed-400 hover:bg-reformed-50 dark:hover:bg-reformed-800 hover:text-reformed-900 dark:hover:text-reformed-200'
                                     }`}
                                 >
                                   <div className="flex items-center">

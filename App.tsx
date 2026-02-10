@@ -16,6 +16,7 @@ import { SystematicTheologyBrowser } from './components/SystematicTheologyBrowse
 import { HistoricalTimeline } from './components/HistoricalTimeline';
 import { ParallelComparison } from './components/ParallelComparison';
 import { CrossReferenceVisualizer } from './components/CrossReferenceVisualizer';
+import { MenuFooter } from './components/MenuFooter';
 import { Confession, BibleVersion, Hymn } from './types';
 import { Sparkles, ArrowUp } from 'lucide-react';
 import { BIBLE_VERSIONS, CONFESSIONS, HYMNS } from './constants';
@@ -332,7 +333,7 @@ const App: React.FC = () => {
         onClose={() => setIsSearchOpen(false)}
       />
 
-      <main className="flex-1 w-full max-w-[100vw] overflow-hidden">
+      <main className="flex-1 w-full max-w-[100vw] overflow-hidden pb-16 sm:pb-20">
         <AnimatePresence mode="wait">
           {activeView === 'library' && (
             <motion.div
@@ -552,18 +553,11 @@ const App: React.FC = () => {
         </motion.button>
       )}
 
-      {activeView !== 'chat' && activeView !== 'bible-navigation' && (
-        <footer className="bg-reformed-900 dark:bg-black text-reformed-300 py-8 mt-12 border-t-4 border-reformed-700 dark:border-reformed-900">
-          <div className="max-w-7xl mx-auto px-4 text-center">
-            <p className="font-serif italic mb-2">Soli Deo Gloria</p>
-            <p className="text-xs opacity-70 font-sans">
-              This application uses Gemini AI to assist in the study of historical Reformed Confessions.
-              <br />
-              Always consult the primary texts for authoritative references.
-            </p>
-          </div>
-        </footer>
-      )}
+      {/* Menu Footer handles main navigation */}
+      <MenuFooter
+        activeView={activeView === 'bible-navigation' ? 'bible' : activeView}
+        onViewChange={handleViewChange}
+      />
     </div>
   );
 };
