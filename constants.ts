@@ -1006,21 +1006,34 @@ export const getConfessionNavigation = (confession: Confession): NavItem[] => {
     items.push({ label: "Introduction", reference: "Heidelberg LD 1", isHeader: true });
     items.push({ label: "Lord's Day 1: Comfort", reference: "Heidelberg LD 1" });
 
-    items.push({ label: "Part I: Misery (LD 2-4)", reference: "Heidelberg LD 2", isHeader: true });
+    items.push({ label: "Part I: Misery (LD 2-4)", reference: "Heidelberg LD 2-4", isHeader: true });
     items.push({ label: "LD 2: The Law", reference: "Heidelberg LD 2" });
     items.push({ label: "LD 3: The Fall", reference: "Heidelberg LD 3" });
     items.push({ label: "LD 4: Punishment", reference: "Heidelberg LD 4" });
 
-    items.push({ label: "Part II: Deliverance (LD 5-31)", reference: "Heidelberg LD 5", isHeader: true });
-    items.push({ label: "LD 5-8: The Mediator", reference: "Heidelberg LD 5" });
-    items.push({ label: "God the Father (LD 9-10)", reference: "Heidelberg LD 9", isHeader: true });
-    items.push({ label: "God the Son (LD 11-19)", reference: "Heidelberg LD 11", isHeader: true });
-    items.push({ label: "God the Spirit (LD 20-24)", reference: "Heidelberg LD 20", isHeader: true });
-    items.push({ label: "Sacraments (LD 25-31)", reference: "Heidelberg LD 25", isHeader: true });
+    items.push({ label: "Part II: Deliverance (LD 5-31)", reference: "Heidelberg LD 5-31", isHeader: true });
+    items.push({ label: "LD 5-8: The Mediator", reference: "Heidelberg LD 5-8" });
 
-    items.push({ label: "Part III: Gratitude (LD 32-52)", reference: "Heidelberg LD 32", isHeader: true });
-    items.push({ label: "Ten Commandments (LD 34-44)", reference: "Heidelberg LD 34", isHeader: true });
-    items.push({ label: "Lord's Prayer (LD 45-52)", reference: "Heidelberg LD 45", isHeader: true });
+    items.push({ label: "God the Father", reference: "Heidelberg LD 9-10", isHeader: true });
+    items.push({ label: "LD 9-10: God the Father", reference: "Heidelberg LD 9-10" });
+
+    items.push({ label: "God the Son", reference: "Heidelberg LD 11-19", isHeader: true });
+    items.push({ label: "LD 11-19: God the Son", reference: "Heidelberg LD 11-19" });
+
+    items.push({ label: "God the Spirit", reference: "Heidelberg LD 20-24", isHeader: true });
+    items.push({ label: "LD 20-24: God the Spirit", reference: "Heidelberg LD 20-24" });
+
+    items.push({ label: "The Sacraments", reference: "Heidelberg LD 25-31", isHeader: true });
+    items.push({ label: "LD 25-31: The Sacraments", reference: "Heidelberg LD 25-31" });
+
+    items.push({ label: "Part III: Gratitude (LD 32-52)", reference: "Heidelberg LD 32-52", isHeader: true });
+    items.push({ label: "LD 32-33: Introduction", reference: "Heidelberg LD 32-33" });
+
+    items.push({ label: "Ten Commandments", reference: "Heidelberg LD 34-44", isHeader: true });
+    items.push({ label: "LD 34-44: Ten Commandments", reference: "Heidelberg LD 34-44" });
+
+    items.push({ label: "Lord's Prayer", reference: "Heidelberg LD 45-52", isHeader: true });
+    items.push({ label: "LD 45-52: Lord's Prayer", reference: "Heidelberg LD 45-52" });
   } else if (confession.id === 'belgic') {
     belgicArticles.forEach((title, idx) => {
       items.push({ label: `Art. ${idx + 1}: ${title}`, reference: `Belgic Confession Art. ${idx + 1}` });
