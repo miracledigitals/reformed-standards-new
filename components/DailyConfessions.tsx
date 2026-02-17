@@ -6,6 +6,49 @@ import { Scroll, Calendar, Copy, RotateCcw, Bookmark, Check } from 'lucide-react
 import { commonMarkdownComponents } from './MarkdownComponents';
 import { saveItem, isItemSaved, removeItem, getSavedItems } from '../services/storageService';
 
+const CONFESSIONS_CHAPTERS = [
+  { book: 'I', chapters: 18 },
+  { book: 'II', chapters: 10 },
+  { book: 'III', chapters: 12 },
+  { book: 'IV', chapters: 16 },
+  { book: 'V', chapters: 14 },
+  { book: 'VI', chapters: 16 },
+  { book: 'VII', chapters: 21 },
+  { book: 'VIII', chapters: 12 },
+  { book: 'IX', chapters: 13 },
+  { book: 'X', chapters: 43 },
+  { book: 'XI', chapters: 31 },
+  { book: 'XII', chapters: 32 },
+  { book: 'XIII', chapters: 39 }
+];
+
+const toRoman = (value: number) => {
+  const numerals: Array<[number, string]> = [
+    [1000, 'M'],
+    [900, 'CM'],
+    [500, 'D'],
+    [400, 'CD'],
+    [100, 'C'],
+    [90, 'XC'],
+    [50, 'L'],
+    [40, 'XL'],
+    [10, 'X'],
+    [9, 'IX'],
+    [5, 'V'],
+    [4, 'IV'],
+    [1, 'I']
+  ];
+  let remaining = value;
+  let result = '';
+  for (const [num, roman] of numerals) {
+    while (remaining >= num) {
+      result += roman;
+      remaining -= num;
+    }
+  }
+  return result;
+};
+
 export const DailyConfessions: React.FC = () => {
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
@@ -36,16 +79,31 @@ export const DailyConfessions: React.FC = () => {
     const diff = today.getTime() - start.getTime();
     const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    const bookNumber = (dayOfYear % 13) + 1;
-    const currentTopic = `Augustine Confessions Book ${bookNumber}`;
+    const totalChapters = CONFESSIONS_CHAPTERS.reduce((sum, item) => sum + item.chapters, 0);
+    let remaining = dayOfYear % totalChapters;
+    let selectedBook = CONFESSIONS_CHAPTERS[0].book;
+    let selectedChapterNumber = 1;
+
+    for (const item of CONFESSIONS_CHAPTERS) {
+      if (remaining < item.chapters) {
+        selectedBook = item.book;
+        selectedChapterNumber = remaining + 1;
+        break;
+      }
+      remaining -= item.chapters;
+    }
+
+    const chapterRoman = toRoman(selectedChapterNumber);
+    const currentTopic = `Augustine Confessions Book ${selectedBook} Chapter ${selectedChapterNumber}`;
+    const currentReference = `BOOK ${selectedBook} · CHAPTER ${chapterRoman}`;
     setTopic(currentTopic);
 
     const prompt = `
-        Provide the verbatim text for **${currentTopic}**.
+        Provide the verbatim text for **${currentReference}** from Augustine's Confessions.
         
         TASK:
-        1. Use the public-domain source text from Project Gutenberg eBook #3296 (or equivalent open-source directory).
-        2. Output the text verbatim with the Book heading and chapter divisions as in the source.
+        1. Use the public-domain source text from Project Gutenberg eBook #3296 or an equivalent open-source directory.
+        2. Output only the requested chapter, verbatim, and include the BOOK and CHAPTER headings as in the source.
         3. Do not add commentary or summaries.
       `;
 
