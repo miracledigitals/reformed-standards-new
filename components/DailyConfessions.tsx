@@ -109,6 +109,9 @@ export const DailyConfessions: React.FC = () => {
 
     const ai = getGeminiClient();
 
+    let text: string | undefined;
+    let lastError: unknown;
+
     try {
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
@@ -121,23 +124,44 @@ export const DailyConfessions: React.FC = () => {
           safetySettings: [...DEFAULT_SAFETY_SETTINGS]
         },
       });
-
-      if (response.text) {
-        setContent(response.text);
-        localStorage.setItem(`augustine-${dateKey}`, response.text);
-        setLoading(false);
-        return;
-      }
-      throw new Error("Empty response from primary generation");
+      text = response.text;
     } catch (error) {
-      console.warn("Confessions reading generation failed", error);
-      const message =
-        error instanceof Error && error.message.includes('GEMINI_API_KEY')
-          ? "### Confessions\n\nWe are currently unable to retrieve today's reading because the API key is not configured."
-          : "### Confessions\n\nWe are currently unable to retrieve today's reading. Please try again.";
-      setContent(message);
-      setLoading(false);
+      lastError = error;
     }
+
+    if (!text) {
+      try {
+        const response = await ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: prompt,
+          config: {
+            systemInstruction: AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION,
+            temperature: 0.2,
+            maxOutputTokens: 8192,
+            safetySettings: [...DEFAULT_SAFETY_SETTINGS]
+          },
+        });
+        text = response.text;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    if (text) {
+      setContent(text);
+      localStorage.setItem(`augustine-${dateKey}`, text);
+      setLoading(false);
+      return;
+    }
+
+    console.warn("Confessions reading generation failed", lastError);
+    const errorMessage = lastError instanceof Error ? lastError.message : 'Unknown error';
+    const message =
+      errorMessage.includes('GEMINI_API_KEY') || errorMessage.includes('API key')
+        ? "### Confessions\n\nWe are currently unable to retrieve today's reading because the API key is not configured."
+        : `### Confessions\n\nWe are currently unable to retrieve today's reading. Please try again.\n\nReason: ${errorMessage}`;
+    setContent(message);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
