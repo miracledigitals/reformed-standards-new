@@ -131,7 +131,11 @@ export const DailyConfessions: React.FC = () => {
       throw new Error("Empty response from primary generation");
     } catch (error) {
       console.warn("Confessions reading generation failed", error);
-      setContent("### Confessions\n\nWe are currently unable to retrieve today's reading. Please try again.");
+      const message =
+        error instanceof Error && error.message.includes('GEMINI_API_KEY')
+          ? "### Confessions\n\nWe are currently unable to retrieve today's reading because the API key is not configured."
+          : "### Confessions\n\nWe are currently unable to retrieve today's reading. Please try again.";
+      setContent(message);
       setLoading(false);
     }
   }, []);
