@@ -108,6 +108,16 @@ export const CONFESSIONS: Confession[] = [
     structure: "30 Chapters",
   },
   {
+    id: "formula-consensus-helvetica",
+    title: "Formula Consensus Helvetica",
+    shortTitle: "Formula Helvetica",
+    date: "1675",
+    author: "Swiss Reformed Churches",
+    description: "A Swiss Reformed doctrinal formula responding to Saumur-style theology, addressing Scripture, covenant, election, and related doctrines.",
+    tags: ["Swiss", "Reformed Scholastic", "Consensus"],
+    structure: "26 Articles",
+  },
+  {
     id: "scots-confession",
     title: "The Scots Confession",
     shortTitle: "Scots Confession",
@@ -487,18 +497,19 @@ Your knowledge base is strictly grounded in the following documents:
 4. Belgic Confession
 5. Canons of Dort
 6. Second Helvetic Confession
-7. 1689 London Baptist Confession of Faith
-8. The Scots Confession (1560)
-9. **Institutes of the Christian Religion** - **SOURCE: John Allen Translation (1813)**.
+7. Formula Consensus Helvetica (1675)
+8. 1689 London Baptist Confession of Faith
+9. The Scots Confession (1560)
+10. **Institutes of the Christian Religion** - **SOURCE: John Allen Translation (1813)**.
    - For all references to the Institutes, you MUST EXCLUSIVELY use open-source online directories (Project Gutenberg eBook #45001 (Vol 1) and #64392 (Vol 2), or equivalent public-domain repositories). 
    - These open-source directories are your ONLY source for the Institutes. Do not use other translations (Beveridge, Battles, etc.).
    - Follow the structure in the source text: Book.Chapter.Section (e.g., 3.14.1).
-10. John Calvin's Commentaries on the Bible
-11. Augustine's Confessions - **SOURCE: Public-domain open-source directories** (Project Gutenberg eBook #3296 or equivalent repositories)
-12. The Bible (Specific versions: ESV, Geneva Bible, ASV, NASB 95, Latin Vulgate)
-13. The Reformed Hymnal (Classic hymns and metrical psalms)
-14. Gadsby's Hymns and data from hymns.countedfaithful.org (specifically the number listings)
-15. The Valley of Vision (Puritan Prayers edited by Arthur Bennett)
+11. John Calvin's Commentaries on the Bible
+12. Augustine's Confessions - **SOURCE: Public-domain open-source directories** (Project Gutenberg eBook #3296 or equivalent repositories)
+13. The Bible (Specific versions: ESV, Geneva Bible, ASV, NASB 95, Latin Vulgate)
+14. The Reformed Hymnal (Classic hymns and metrical psalms)
+15. Gadsby's Hymns and data from hymns.countedfaithful.org (specifically the number listings)
+16. The Valley of Vision (Puritan Prayers edited by Arthur Bennett)
 
 STRICT SOURCE REQUIREMENT:
 - You must ONLY answer based on the content found in these original historical documents and specific Bible versions.
@@ -1097,6 +1108,10 @@ export const getConfessionNavigation = (confession: Confession): NavItem[] => {
     secondHelveticChapters.forEach((title, idx) => {
       items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `Second Helvetic Confession Ch. ${idx + 1}` });
     });
+  } else if (confession.id === 'formula-consensus-helvetica') {
+    for (let i = 1; i <= 26; i++) {
+      items.push({ label: `Art. ${i}`, reference: `Formula Consensus Helvetica Art. ${i}` });
+    }
   } else if (confession.id === 'scots-confession') {
     scotsChapters.forEach((title, idx) => {
       items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `The Scots Confession Ch. ${idx + 1}` });

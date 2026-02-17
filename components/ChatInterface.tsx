@@ -251,7 +251,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
               const scriptureRegex = /\b((?:1|2|3|I|II|III)(?:\.|\s)?)?([A-Za-z]+(?:\.|\s[A-Za-z]+)*)\s+(\d+):(\d+)(?:[–-](\d+))?\b/gi;
 
               // Refined Regex for Confessions
-              const confessionRegex = /\b(WCF|WSC|WLC|Heidelberg|HC|Belgic|BC|Canons of Dort|CD|Second Helvetic|2HC|1689 LBCF|LBCF|Institutes|Inst|Westminster Confession(?: of Faith)?|Westminster Shorter Catechism|Westminster Larger Catechism|Heidelberg Catechism|Belgic Confession|Second Helvetic Confession|The Scots Confession|Scots Confession|1689 Baptist Confession)\s+(?:Q\.?|Quest\.?|Question\s|Art\.?|Article\s|Ch\.?|Chap\.?|Chapter\s|Bk\.?|Book\s|Lord's Day\s|Head\s|Section\s|Sec\.?)?\s*\d+(?:[\.:]\d+)*(?:[\.:]\d+)?\b/gi;
+              const confessionRegex = /\b(WCF|WSC|WLC|Heidelberg|HC|Belgic|BC|Canons of Dort|CD|Second Helvetic|2HC|Formula Consensus Helvetica|Formula Helvetica|FCH|1689 LBCF|LBCF|Institutes|Inst|Westminster Confession(?: of Faith)?|Westminster Shorter Catechism|Westminster Larger Catechism|Heidelberg Catechism|Belgic Confession|Second Helvetic Confession|Formula Consensus Helvetica|The Scots Confession|Scots Confession|1689 Baptist Confession)\s+(?:Q\.?|Quest\.?|Question\s|Art\.?|Article\s|Ch\.?|Chap\.?|Chapter\s|Bk\.?|Book\s|Lord's Day\s|Head\s|Section\s|Sec\.?)?\s*\d+(?:[\.:]\d+)*(?:[\.:]\d+)?\b/gi;
 
               // Create a case-insensitive regex for connections
               const connectionsRegex = new RegExp(`\\b(${connectionTitles.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'gi');
@@ -287,7 +287,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
                 const ref = match[0];
                 // Determine type based on which group matched.
                 const isScripture = scriptureRegex.test(ref);
-                const isConfession = !isScripture && /\b(WCF|WSC|WLC|Heidelberg|HC|Belgic|BC|Canons of Dort|CD|Second Helvetic|2HC|1689 LBCF|LBCF|Institutes|Inst|Westminster Confession|Westminster Shorter|Westminster Larger|Belgic|Second Helvetic|Scots Confession|1689 Baptist)/i.test(ref);
+                const isConfession = !isScripture && /\b(WCF|WSC|WLC|Heidelberg|HC|Belgic|BC|Canons of Dort|CD|Second Helvetic|2HC|Formula Consensus Helvetica|Formula Helvetica|FCH|1689 LBCF|LBCF|Institutes|Inst|Westminster Confession|Westminster Shorter|Westminster Larger|Belgic|Second Helvetic|Scots Confession|1689 Baptist)/i.test(ref);
 
                 // Check for connections
                 // We need to match exactly against the titles list to be sure, using the same regex logic
