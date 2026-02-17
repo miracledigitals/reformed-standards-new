@@ -9,6 +9,7 @@ import { motion, Variants } from 'framer-motion';
 
 interface LibraryProps {
   onSelectConfession: (confession: Confession) => void;
+  onViewChange: (view: 'augustine') => void;
 }
 
 const SkeletonCard = () => (
@@ -54,7 +55,7 @@ const item: Variants = {
   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 50 } }
 };
 
-export const Library: React.FC<LibraryProps> = ({ onSelectConfession }) => {
+export const Library: React.FC<LibraryProps> = ({ onSelectConfession, onViewChange }) => {
   const [displayCount, setDisplayCount] = useState(6);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -114,7 +115,7 @@ export const Library: React.FC<LibraryProps> = ({ onSelectConfession }) => {
       let prompt = "";
 
       if (confession.id === 'institutes') {
-        prompt = `Provide the COMPLETE verbatim text of Calvin's Institutes (Summary of all 4 Books) using the John Allen Translation (1813). Since the full text is too large for one output, provide a comprehensive structured digest containing the text of the primary sections for Book 1 through 4.`;
+        prompt = `Provide the COMPLETE verbatim text of Calvin's Institutes (Summary of all 4 Books) using the John Allen Translation (1813). Use Google Search to verify against open-source directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources). Since the full text is too large for one output, provide a comprehensive structured digest containing the text of the primary sections for Book 1 through 4.`;
       } else {
         prompt = `Provide the COMPLETE verbatim text of the ${confession.title}. Include all Articles or Chapters. Use Google Search to ensure 100% accuracy to the original document. Output as a clear Markdown document.`;
       }
@@ -192,6 +193,33 @@ export const Library: React.FC<LibraryProps> = ({ onSelectConfession }) => {
         <p className="text-lg sm:text-xl text-reformed-700 dark:text-reformed-200 max-w-2xl mx-auto font-serif transition-colors mb-10 leading-relaxed">
           Explore the historic documents of the Reformed faith. Select a document to begin studying.
         </p>
+
+        <div className="max-w-3xl mx-auto mb-10">
+          <div className="bg-white dark:bg-reformed-900 rounded-2xl border border-reformed-200 dark:border-reformed-800 shadow-sm overflow-hidden">
+            <div className="bg-reformed-50 dark:bg-reformed-900/40 px-6 py-5 border-b border-reformed-200 dark:border-reformed-800 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-reformed-800 text-white rounded-full">
+                  <Book className="w-4 h-4" />
+                </div>
+                <div className="text-left">
+                  <div className="text-xs font-bold text-reformed-500 dark:text-reformed-400 uppercase tracking-widest">Daily Reading</div>
+                  <div className="text-lg font-display font-bold text-reformed-900 dark:text-reformed-100">Augustine Confessions</div>
+                </div>
+              </div>
+              <button
+                onClick={() => onViewChange('augustine')}
+                className="px-4 py-2 rounded-full bg-reformed-800 text-white text-xs font-bold uppercase tracking-wider hover:bg-reformed-700 transition-colors"
+              >
+                Open Today
+              </button>
+            </div>
+            <div className="px-6 py-5 text-left">
+              <p className="text-sm sm:text-base text-reformed-700 dark:text-reformed-300 font-serif leading-relaxed">
+                One book per day from Augustine’s Confessions, delivered with the same cadence and bookmarking tools as the daily devotional.
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Search Bar & Controls */}
         <div className="max-w-xl mx-auto">

@@ -56,7 +56,7 @@ export const CrossReferenceVisualizer: React.FC = () => {
           }
         ]
         
-        Use the John Allen 1813 translation for any 'Institutes' references found.
+        Use the John Allen 1813 translation for any 'Institutes' references found, verified against open-source directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources).
       `;
 
       const response = await ai.models.generateContent({
@@ -65,6 +65,7 @@ export const CrossReferenceVisualizer: React.FC = () => {
         config: {
           responseMimeType: 'application/json',
           temperature: 0.1,
+          tools: [{ googleSearch: {} }],
           safetySettings: [
             { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
             { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
@@ -96,8 +97,7 @@ export const CrossReferenceVisualizer: React.FC = () => {
       let tools: any[] | undefined = [{ googleSearch: {} }];
 
       if (res.document.toLowerCase().includes("institutes")) {
-        prompt = `Provide the verbatim text of Calvin's Institutes ${res.reference} using the John Allen Translation (1813). Do not use search. Output text only.`;
-        tools = undefined;
+        prompt = `Provide the verbatim text of Calvin's Institutes ${res.reference} using the John Allen Translation (1813). Use Google Search to verify against open-source directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources). Output text only.`;
       } else {
         prompt = `Quote the full text of ${res.document} ${res.reference} verbatim. Use Google Search to verify accuracy. Include the Question if it is a Catechism.`;
       }
