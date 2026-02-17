@@ -49,20 +49,59 @@ const toRoman = (value: number) => {
   return result;
 };
 
-const normalizeChapterText = (raw: string) => {
-  const paragraphs = raw
-    .split(/\n{2,}/)
-    .map(p => p.replace(/\s+/g, ' ').trim())
-    .filter(Boolean);
+const normalizeWhitespace = (value: string) =>
+  value
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n[ \t]+/g, '\n')
+    .trim();
 
+const dedupeParagraphs = (paragraphs: string[]) => {
+  const seen = new Set<string>();
+  const seenHeadings = new Set<string>();
   const deduped: string[] = [];
+
   for (const paragraph of paragraphs) {
-    if (deduped[deduped.length - 1] !== paragraph) {
-      deduped.push(paragraph);
+    const normalized = paragraph.replace(/\s+/g, ' ').trim();
+    const isHeading = /^#+\s*BOOK\s+[IVX]+$/i.test(normalized) ||
+      /^#+\s*CHAPTER\s+[IVX]+$/i.test(normalized) ||
+      /^BOOK\s+[IVX]+$/i.test(normalized) ||
+      /^CHAPTER\s+[IVX]+$/i.test(normalized);
+
+    if (isHeading) {
+      const headingKey = normalized.replace(/^#+\s*/i, '').toUpperCase();
+      if (seenHeadings.has(headingKey)) continue;
+      seenHeadings.add(headingKey);
+      if (deduped[deduped.length - 1] !== normalized) deduped.push(normalized);
+      continue;
     }
+
+    if (normalized.length >= 40) {
+      if (seen.has(normalized)) continue;
+      seen.add(normalized);
+    }
+
+    if (deduped[deduped.length - 1] !== normalized) deduped.push(normalized);
   }
 
-  return deduped.join('\n\n').trim();
+  return deduped;
+};
+
+const postProcessReadingText = (raw: string, book: string, chapterRoman: string) => {
+  const normalized = normalizeWhitespace(raw);
+  const paragraphs = normalized.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
+  const deduped = dedupeParagraphs(paragraphs);
+  let combined = deduped.join('\n\n').trim();
+
+  const hasBook = /(^|\n)\s*BOOK\s+[IVX]+\s*(\n|$)/i.test(combined);
+  const hasChapter = /(^|\n)\s*CHAPTER\s+[IVX]+\s*(\n|$)/i.test(combined);
+  const headings: string[] = [];
+  if (!hasBook) headings.push(`BOOK ${book}`);
+  if (!hasChapter) headings.push(`CHAPTER ${chapterRoman}`);
+  if (headings.length) combined = `${headings.join('\n')}\n\n${combined}`;
+
+  return combined.trim();
 };
 
 const extractCcelChapterText = (html: string, book: string, chapterRoman: string) => {
@@ -81,19 +120,7 @@ const extractCcelChapterText = (html: string, book: string, chapterRoman: string
 
   if (parts.length === 0) return null;
 
-  let combined = normalizeChapterText(parts.join('\n\n'));
-  const hasBook = /BOOK\s+[IVX]+/i.test(combined);
-  const hasChapter = /CHAPTER\s+[IVX]+/i.test(combined);
-
-  const headings: string[] = [];
-  if (!hasBook) headings.push(`BOOK ${book}`);
-  if (!hasChapter) headings.push(`CHAPTER ${chapterRoman}`);
-
-  if (headings.length) {
-    combined = `${headings.join('\n')}\n\n${combined}`;
-  }
-
-  return combined.trim();
+  return postProcessReadingText(parts.join('\n\n'), book, chapterRoman);
 };
 
 const fetchCcelChapter = async (book: string, chapterRoman: string) => {
@@ -216,8 +243,9 @@ export const DailyConfessions: React.FC = () => {
     }
 
     if (text) {
-      setContent(text);
-      localStorage.setItem(`augustine-${dateKey}`, text);
+      const cleaned = postProcessReadingText(text, selectedBook, chapterRoman);
+      setContent(cleaned);
+      localStorage.setItem(`augustine-${dateKey}`, cleaned);
       setLoading(false);
       return;
     }
