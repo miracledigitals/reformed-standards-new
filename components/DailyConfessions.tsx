@@ -49,6 +49,63 @@ const toRoman = (value: number) => {
   return result;
 };
 
+const normalizeChapterText = (raw: string) => {
+  const paragraphs = raw
+    .split(/\n{2,}/)
+    .map(p => p.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+
+  const deduped: string[] = [];
+  for (const paragraph of paragraphs) {
+    if (deduped[deduped.length - 1] !== paragraph) {
+      deduped.push(paragraph);
+    }
+  }
+
+  return deduped.join('\n\n').trim();
+};
+
+const extractCcelChapterText = (html: string, book: string, chapterRoman: string) => {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const root =
+    doc.querySelector('#theText') ||
+    doc.querySelector('#main-content') ||
+    doc.body;
+
+  if (!root) return null;
+
+  const nodes = Array.from(root.querySelectorAll('h1, h2, h3, h4, h5, p, li'));
+  const parts = nodes
+    .map(node => node.textContent?.replace(/\s+/g, ' ').trim() || '')
+    .filter(Boolean);
+
+  if (parts.length === 0) return null;
+
+  let combined = normalizeChapterText(parts.join('\n\n'));
+  const hasBook = /BOOK\s+[IVX]+/i.test(combined);
+  const hasChapter = /CHAPTER\s+[IVX]+/i.test(combined);
+
+  const headings: string[] = [];
+  if (!hasBook) headings.push(`BOOK ${book}`);
+  if (!hasChapter) headings.push(`CHAPTER ${chapterRoman}`);
+
+  if (headings.length) {
+    combined = `${headings.join('\n')}\n\n${combined}`;
+  }
+
+  return combined.trim();
+};
+
+const fetchCcelChapter = async (book: string, chapterRoman: string) => {
+  const bookLower = book.toLowerCase();
+  const chapterLower = chapterRoman.toLowerCase();
+  const url = `https://ccel.org/ccel/augustine/confess.${bookLower}.${chapterLower}.html`;
+  const response = await fetch(url);
+  if (!response.ok) return null;
+  const html = await response.text();
+  return extractCcelChapterText(html, book, chapterRoman);
+};
+
 export const DailyConfessions: React.FC = () => {
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
@@ -113,18 +170,29 @@ export const DailyConfessions: React.FC = () => {
     let lastError: unknown;
 
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt + " Use Google Search to verify the text.",
-        config: {
-          systemInstruction: AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION,
-          temperature: 0.2,
-          maxOutputTokens: 8192,
-          tools: [{ googleSearch: {} }],
-          safetySettings: [...DEFAULT_SAFETY_SETTINGS]
-        },
-      });
-      text = response.text;
+      const ccelText = await fetchCcelChapter(selectedBook, chapterRoman);
+      if (ccelText) {
+        text = ccelText;
+      }
+    } catch (error) {
+      lastError = error;
+    }
+
+    try {
+      if (!text) {
+        const response = await ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: prompt + " Use Google Search to verify the text.",
+          config: {
+            systemInstruction: AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION,
+            temperature: 0.2,
+            maxOutputTokens: 8192,
+            tools: [{ googleSearch: {} }],
+            safetySettings: [...DEFAULT_SAFETY_SETTINGS]
+          },
+        });
+        text = response.text;
+      }
     } catch (error) {
       lastError = error;
     }
