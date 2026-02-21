@@ -204,7 +204,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
       const tools = [{ googleSearch: {} }];
 
       const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-1.5-flash',
         contents: prompt,
         config: {
           maxOutputTokens: 8192,

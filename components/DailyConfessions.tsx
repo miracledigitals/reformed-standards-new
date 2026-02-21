@@ -208,7 +208,7 @@ export const DailyConfessions: React.FC = () => {
     try {
       if (!text) {
         const response = await ai.models.generateContent({
-          model: 'gemini-2.0-flash',
+          model: 'gemini-1.5-flash',
           contents: prompt + " Use Google Search to verify the text.",
           config: {
             systemInstruction: AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION,
@@ -227,7 +227,7 @@ export const DailyConfessions: React.FC = () => {
     if (!text) {
       try {
         const response = await ai.models.generateContent({
-          model: 'gemini-2.0-flash',
+          model: 'gemini-1.5-flash',
           contents: prompt,
           config: {
             systemInstruction: AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION,
@@ -250,14 +250,14 @@ export const DailyConfessions: React.FC = () => {
       return;
     }
 
-    console.warn("Confessions reading generation failed", lastError);
-    const errorMessage = lastError instanceof Error ? lastError.message : 'Unknown error';
-    const message =
-      errorMessage.includes('GEMINI_API_KEY') || errorMessage.includes('API key')
-        ? "### Confessions\n\nWe are currently unable to retrieve today's reading because the API key is not configured."
-        : `### Confessions\n\nWe are currently unable to retrieve today's reading. Please try again.\n\nReason: ${errorMessage}`;
-    setContent(message);
-    setLoading(false);
+    if (!text) {
+      console.warn("Confessions reading generation failed", lastError);
+      const errorMessage = lastError instanceof Error ? lastError.message : String(lastError);
+      const message = `### Confessions\n\nWe are currently unable to retrieve today's reading. \n\n**Error:** ${errorMessage}\n\nPlease ensure your API key is correct and you have an active internet connection.`;
+      setContent(message);
+      setLoading(false);
+      return;
+    }
   }, []);
 
   useEffect(() => {
@@ -356,8 +356,8 @@ export const DailyConfessions: React.FC = () => {
             <button
               onClick={handleToggleSave}
               className={`p-2 rounded-full transition-colors ${isSaved
-                  ? 'bg-reformed-800 text-white hover:bg-reformed-700'
-                  : 'text-reformed-500 hover:text-reformed-900 hover:bg-reformed-200 dark:text-reformed-400 dark:hover:text-white dark:hover:bg-reformed-800'
+                ? 'bg-reformed-800 text-white hover:bg-reformed-700'
+                : 'text-reformed-500 hover:text-reformed-900 hover:bg-reformed-200 dark:text-reformed-400 dark:hover:text-white dark:hover:bg-reformed-800'
                 }`}
               title={isSaved ? "Remove Bookmark" : "Bookmark this"}
             >

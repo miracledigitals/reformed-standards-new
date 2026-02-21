@@ -13,15 +13,16 @@ export const DEFAULT_SAFETY_SETTINGS = [
 
 export const getGeminiClient = (): GoogleGenAI => {
   if (!client) {
-    // Support both Vite (import.meta.env) and process.env (defined by vite.config.ts)
+    // In Vite, use import.meta.env for variables prefixed with VITE_
+    // Also support variables injected via 'define' in vite.config.ts (exact string match required)
     const apiKey =
-      (typeof process !== 'undefined' && process.env?.API_KEY) ||
-      (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) ||
-      import.meta.env?.VITE_GEMINI_API_KEY ||
-      import.meta.env?.VITE_API_KEY;
+      import.meta.env.VITE_GEMINI_API_KEY ||
+      import.meta.env.VITE_API_KEY ||
+      process.env.GEMINI_API_KEY ||
+      process.env.API_KEY;
 
     if (!apiKey) {
-      throw new Error("GEMINI_API_KEY environment variable is not set. Please add it to your .env file.");
+      throw new Error("GEMINI_API_KEY environment variable is not set. Please ensure you have VITE_GEMINI_API_KEY in your .env or .env.local file.");
     }
     client = new GoogleGenAI({ apiKey });
   }
@@ -31,13 +32,11 @@ export const getGeminiClient = (): GoogleGenAI => {
 export const createChatSession = (): Chat => {
   const ai = getGeminiClient();
   return ai.chats.create({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-1.5-flash',
     config: {
       systemInstruction: INITIAL_SYSTEM_INSTRUCTION,
       temperature: 0.1,
       maxOutputTokens: 8192,
-      // NOTE: googleSearch is NOT included here because it causes failures in chat sessions
-      // with gemini-2.5-flash. Individual generateContent calls use search where needed.
       safetySettings: [...DEFAULT_SAFETY_SETTINGS]
     },
   });
