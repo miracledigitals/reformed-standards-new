@@ -101,7 +101,7 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({ isOpen, onClose }) => 
       `;
 
       const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
+        model: 'gemini-2.0-flash',
         contents: prompt,
         config: {
           systemInstruction: INITIAL_SYSTEM_INSTRUCTION,
@@ -170,7 +170,7 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({ isOpen, onClose }) => 
       }
 
       const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
+        model: 'gemini-2.0-flash',
         contents: prompt,
         config: {
           temperature: 0.1,
