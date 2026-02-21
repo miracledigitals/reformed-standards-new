@@ -71,7 +71,7 @@ export const DailyDevotional: React.FC = () => {
 
     try {
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: 'gemini-3.1-pro-preview',
         contents: prompt + " Use Google Search to verify the text.",
         config: {
           systemInstruction: DEVOTIONAL_SYSTEM_INSTRUCTION,

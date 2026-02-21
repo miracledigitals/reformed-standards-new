@@ -121,7 +121,7 @@ export const Library: React.FC<LibraryProps> = ({ onSelectConfession, onViewChan
       }
 
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: 'gemini-3.1-pro-preview',
         contents: prompt,
         config: {
           temperature: 0.1,

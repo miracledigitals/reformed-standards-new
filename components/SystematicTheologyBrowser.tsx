@@ -88,7 +88,7 @@ export const SystematicTheologyBrowser: React.FC = () => {
             // Attempt 1: With Search Grounding
             try {
                 const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
+                    model: 'gemini-3.1-pro-preview',
                     contents: prompt + " Use Google Search to verify citations.",
                     config: {
                         temperature: 0.3,
@@ -106,7 +106,7 @@ export const SystematicTheologyBrowser: React.FC = () => {
             if (!text) {
                 console.log("Attempting fallback generation without search tools...");
                 const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
+                    model: 'gemini-3.1-pro-preview',
                     contents: prompt, // Removed search instruction
                     config: {
                         temperature: 0.4,
