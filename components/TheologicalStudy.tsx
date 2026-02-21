@@ -63,7 +63,7 @@ export const TheologicalStudy: React.FC = () => {
     // Attempt 1: High quality with Search
     try {
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: 'gemini-2.0-flash',
         contents: prompt + " Use Google Search to verify citations.",
         config: {
           systemInstruction: STUDY_SYSTEM_INSTRUCTION,
@@ -83,7 +83,7 @@ export const TheologicalStudy: React.FC = () => {
       console.log("Retrying study generation without search...");
       try {
         const response = await ai.models.generateContent({
-          model: 'gemini-2.5-flash',
+          model: 'gemini-2.0-flash',
           contents: prompt,
           config: {
             systemInstruction: STUDY_SYSTEM_INSTRUCTION,

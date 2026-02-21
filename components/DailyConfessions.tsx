@@ -208,7 +208,7 @@ export const DailyConfessions: React.FC = () => {
     try {
       if (!text) {
         const response = await ai.models.generateContent({
-          model: 'gemini-2.5-flash',
+          model: 'gemini-2.0-flash',
           contents: prompt + " Use Google Search to verify the text.",
           config: {
             systemInstruction: AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION,
@@ -227,7 +227,7 @@ export const DailyConfessions: React.FC = () => {
     if (!text) {
       try {
         const response = await ai.models.generateContent({
-          model: 'gemini-2.5-flash',
+          model: 'gemini-2.0-flash',
           contents: prompt,
           config: {
             systemInstruction: AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION,

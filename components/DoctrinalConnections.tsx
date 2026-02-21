@@ -113,7 +113,7 @@ export const DoctrinalConnections: React.FC<DoctrinalConnectionsProps> = ({ init
             // Attempt 1: With Search
             try {
                 const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
+                    model: 'gemini-2.0-flash',
                     contents: prompt,
                     config: {
                         temperature: 0.2,
@@ -131,7 +131,7 @@ export const DoctrinalConnections: React.FC<DoctrinalConnectionsProps> = ({ init
             if (!text) {
                 console.log("Retrying without search...");
                 const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
+                    model: 'gemini-2.0-flash',
                     contents: prompt,
                     config: {
                         temperature: 0.3,
