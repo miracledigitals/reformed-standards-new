@@ -8,6 +8,7 @@ import { BibleGallery } from './components/BibleGallery';
 import { BibleNavigator } from './components/BibleNavigator';
 import { Hymnal } from './components/Hymnal';
 import { DailyDevotional } from './components/DailyDevotional';
+import { DailyConfessions } from './components/DailyConfessions';
 import { TheologicalStudy } from './components/TheologicalStudy';
 import { QuickSearch } from './components/QuickSearch';
 import { DoctrinalConnections } from './components/DoctrinalConnections';
@@ -23,7 +24,7 @@ import { BIBLE_VERSIONS, CONFESSIONS, HYMNS } from './constants';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const App: React.FC = () => {
-  const [activeView, setActiveView] = useState<'library' | 'chat' | 'theologians' | 'bible' | 'bible-navigation' | 'hymnal' | 'devotional' | 'study' | 'connections' | 'notebook' | 'systematics' | 'timeline' | 'comparison' | 'cross-reference'>('library');
+  const [activeView, setActiveView] = useState<'library' | 'chat' | 'theologians' | 'bible' | 'bible-navigation' | 'hymnal' | 'devotional' | 'augustine' | 'study' | 'connections' | 'notebook' | 'systematics' | 'timeline' | 'comparison' | 'cross-reference'>('library');
   const [viewHistory, setViewHistory] = useState<string[]>([]);
 
   const [activeConfession, setActiveConfession] = useState<Confession | null>(null);
@@ -344,7 +345,7 @@ const App: React.FC = () => {
               transition={{ duration: 0.3 }}
               className="h-full"
             >
-              <Library onSelectConfession={handleSelectConfession} />
+              <Library onSelectConfession={handleSelectConfession} onViewChange={handleViewChange} />
             </motion.div>
           )}
 
@@ -418,6 +419,19 @@ const App: React.FC = () => {
               className="h-full"
             >
               <DailyDevotional />
+            </motion.div>
+          )}
+
+          {activeView === 'augustine' && (
+            <motion.div
+              key="augustine"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="h-full"
+            >
+              <DailyConfessions />
             </motion.div>
           )}
 

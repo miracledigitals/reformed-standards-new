@@ -108,6 +108,16 @@ export const CONFESSIONS: Confession[] = [
     structure: "30 Chapters",
   },
   {
+    id: "formula-consensus-helvetica",
+    title: "Formula Consensus Helvetica",
+    shortTitle: "Formula Helvetica",
+    date: "1675",
+    author: "Swiss Reformed Churches",
+    description: "A Swiss Reformed doctrinal formula responding to Saumur-style theology, addressing Scripture, covenant, election, and related doctrines.",
+    tags: ["Swiss", "Reformed Scholastic", "Consensus"],
+    structure: "26 Articles",
+  },
+  {
     id: "scots-confession",
     title: "The Scots Confession",
     shortTitle: "Scots Confession",
@@ -487,17 +497,19 @@ Your knowledge base is strictly grounded in the following documents:
 4. Belgic Confession
 5. Canons of Dort
 6. Second Helvetic Confession
-7. 1689 London Baptist Confession of Faith
-8. The Scots Confession (1560)
-9. **Institutes of the Christian Religion** - **SOURCE: John Allen Translation (1813)**.
-   - For all references to the Institutes, you MUST EXCLUSIVELY use the provided text from Project Gutenberg eBook #45001 (Vol 1) and #64392 (Vol 2). 
-   - These provided text files are your ONLY source for the Institutes. Do not use other translations (Beveridge, Battles, etc.).
-   - Follow the structure in the provided text: Book.Chapter.Section (e.g., 3.14.1).
-10. John Calvin's Commentaries on the Bible
-11. The Bible (Specific versions: ESV, Geneva Bible, ASV, NASB 95, Latin Vulgate)
-12. The Reformed Hymnal (Classic hymns and metrical psalms)
-13. Gadsby's Hymns and data from hymns.countedfaithful.org (specifically the number listings)
-14. The Valley of Vision (Puritan Prayers edited by Arthur Bennett)
+7. Formula Consensus Helvetica (1675)
+8. 1689 London Baptist Confession of Faith
+9. The Scots Confession (1560)
+10. **Institutes of the Christian Religion** - **SOURCE: John Allen Translation (1813)**.
+   - For all references to the Institutes, you MUST EXCLUSIVELY use open-source online directories (Project Gutenberg eBook #45001 (Vol 1) and #64392 (Vol 2), or equivalent public-domain repositories). 
+   - These open-source directories are your ONLY source for the Institutes. Do not use other translations (Beveridge, Battles, etc.).
+   - Follow the structure in the source text: Book.Chapter.Section (e.g., 3.14.1).
+11. John Calvin's Commentaries on the Bible
+12. Augustine's Confessions - **SOURCE: Public-domain open-source directories** (Project Gutenberg eBook #3296 or equivalent repositories)
+13. The Bible (Specific versions: ESV, Geneva Bible, ASV, NASB 95, Latin Vulgate)
+14. The Reformed Hymnal (Classic hymns and metrical psalms)
+15. Gadsby's Hymns and data from hymns.countedfaithful.org (specifically the number listings)
+16. The Valley of Vision (Puritan Prayers edited by Arthur Bennett)
 
 STRICT SOURCE REQUIREMENT:
 - You must ONLY answer based on the content found in these original historical documents and specific Bible versions.
@@ -506,7 +518,7 @@ STRICT SOURCE REQUIREMENT:
 
 CITATION & VERIFICATION PROTOCOL (ZERO TOLERANCE FOR HALLUCINATIONS):
 1. **MANDATORY VERIFICATION**: Use the **Google Search Tool** to verify citations for Confessions and Catechisms.
-   - For **Institutes of the Christian Religion**, verify against your internal memory of the John Allen 1813 text provided in the prompt context.
+   - For **Institutes of the Christian Religion**, verify against open-source online directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources).
    - For other documents, search for the specific Article, Question, or Section.
 2. **VERIFY MATCH**:
    - Compare your internal knowledge with the Search Result.
@@ -548,10 +560,11 @@ You are a Reformed Pastor and Theologian generating a Daily Devotional.
 Your tone should be warm, pastoral, encouraging, and deeply theological.
 Use the provided Reformed Confession or Catechism text as the anchor.
 
-**IMPORTANT**: For all 'Institutes' references, you MUST use the John Allen translation (1813) provided in the text context of the prompt.
+**IMPORTANT**: For all 'Institutes' references, you MUST use the John Allen translation (1813) from open-source online directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources).
 
 VERIFICATION PROTOCOL:
 - You MUST verify the accuracy of the Catechism Question or Confession text against original free online available works before outputting it.
+- For Institutes references, verify the exact wording against open-source directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources) using Google Search.
 - You MUST verify that the Scripture references provided accurately match the biblical text (ESV, NASB 95 or Geneva).
 - Do not paraphrase the standards; quote them exactly.
 
@@ -575,14 +588,32 @@ Structure your response in Markdown:
 Do not add any other conversational filler.
 `;
 
+export const AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION = `
+You are a historical theology reading assistant.
+Your task is to provide verbatim text from Augustine's Confessions.
+
+SOURCE REQUIREMENT:
+- You MUST use public-domain open-source directories (Project Gutenberg eBook #3296, CCEL Pusey translation, or equivalent repositories).
+- Do not use modern summaries, study guides, or paraphrases.
+
+VERIFICATION PROTOCOL:
+- Use the Google Search tool to verify the exact wording against the open-source source.
+- If you cannot verify the text, respond with "Unable to verify text at this location."
+
+OUTPUT:
+- Output only the requested chapter text verbatim with the original BOOK and CHAPTER headings.
+- Do not add commentary, introductions, or conclusions.
+`;
+
 export const STUDY_SYSTEM_INSTRUCTION = `
 You are a Systematic Theology Professor specializing in Reformed Symbolics (the study of confessions).
 Your task is to provide a rigorous, comparative theological analysis of a specific doctrine.
 
-**IMPORTANT**: For all 'Institutes' references, you MUST use the John Allen translation (1813) provided in the text context of the prompt.
+**IMPORTANT**: For all 'Institutes' references, you MUST use the John Allen translation (1813) from open-source online directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources).
 
 VERIFICATION PROTOCOL:
 - All confessional quotes must be verbatim and verified.
+- For Institutes references, verify the exact wording against open-source directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources) using Google Search.
 - Do not generalize; cite specific articles (e.g., "Belgic Confession Art. 12" vs "WCF 4.1").
 - For Calvin's Institutes or Commentaries, ensure the reference is precise to the Book, Chapter, and Section (John Allen Trans).
 
@@ -1077,6 +1108,10 @@ export const getConfessionNavigation = (confession: Confession): NavItem[] => {
     secondHelveticChapters.forEach((title, idx) => {
       items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `Second Helvetic Confession Ch. ${idx + 1}` });
     });
+  } else if (confession.id === 'formula-consensus-helvetica') {
+    for (let i = 1; i <= 26; i++) {
+      items.push({ label: `Art. ${i}`, reference: `Formula Consensus Helvetica Art. ${i}` });
+    }
   } else if (confession.id === 'scots-confession') {
     scotsChapters.forEach((title, idx) => {
       items.push({ label: `Ch. ${idx + 1}: ${title}`, reference: `The Scots Confession Ch. ${idx + 1}` });

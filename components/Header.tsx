@@ -1,10 +1,10 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { BookOpen, Users, Library, Book, Sun, Moon, Music, Coffee, Search, ChevronLeft, GraduationCap, Workflow, Bookmark, Layers, ChevronDown, Check, GitCompare, Clock, Share2, WifiOff, Share } from 'lucide-react';
+import { BookOpen, Users, Library, Book, Sun, Moon, Music, Coffee, Search, ChevronLeft, GraduationCap, Workflow, Bookmark, Layers, ChevronDown, Check, GitCompare, Clock, Share2, WifiOff, Share, Scroll } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface HeaderProps {
-  activeView: 'library' | 'chat' | 'theologians' | 'bible' | 'hymnal' | 'devotional' | 'study' | 'connections' | 'notebook' | 'systematics' | 'timeline' | 'comparison' | 'cross-reference' | 'bible-navigation';
+  activeView: 'library' | 'chat' | 'theologians' | 'bible' | 'hymnal' | 'devotional' | 'augustine' | 'study' | 'connections' | 'notebook' | 'systematics' | 'timeline' | 'comparison' | 'cross-reference' | 'bible-navigation';
   onViewChange: (view: any) => void;
   theme: 'light' | 'dark';
   toggleTheme: () => void;
@@ -80,6 +80,7 @@ export const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, theme,
       case 'bible': return 'Bible';
       case 'hymnal': return 'Hymnal';
       case 'devotional': return 'Daily';
+      case 'augustine': return 'Confessions';
       case 'study': return 'Study';
       case 'systematics': return 'Systematics';
       case 'connections': return 'Map';
@@ -106,6 +107,7 @@ export const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, theme,
       label: 'Application',
       items: [
         { id: 'devotional', label: 'Daily', icon: Coffee },
+        { id: 'augustine', label: 'Confessions', icon: Scroll },
         { id: 'study', label: 'Study', icon: GraduationCap },
         { id: 'comparison', label: 'Compare', icon: GitCompare },
       ]

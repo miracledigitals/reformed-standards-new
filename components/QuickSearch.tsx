@@ -97,7 +97,7 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({ isOpen, onClose }) => 
           "relatedTerms": ["Term 1", "Term 2", "Term 3"]
         }
         
-        Ensure references are accurate and exist in the original texts. Use internal knowledge to verify.
+        Ensure references are accurate and exist in the original texts. Do not guess; omit anything you cannot verify from open-source directories.
       `;
 
       const response = await ai.models.generateContent({
@@ -150,12 +150,11 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({ isOpen, onClose }) => 
             The user wants the verbatim text for: ${result.document} ${result.reference}.
             
             TASK:
-            1. Retrieve the text of Calvin's Institutes ${result.reference} using your internal knowledge of the **John Allen Translation (1813)**.
-            2. Do NOT use Google Search.
-            3. Verify the Book, Chapter, and Section numbers match the text.
+            1. Retrieve the text of Calvin's Institutes ${result.reference} using the **John Allen Translation (1813)**.
+            2. Use Google Search to verify the exact text against open-source directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources).
+            3. Verify the Book, Chapter, and Section numbers match the source text.
             4. Output the text verbatim.
           `;
-        tools = undefined;
       } else {
         prompt = `
             Quote the following text verbatim from the original historical document:

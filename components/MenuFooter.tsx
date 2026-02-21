@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Library, Book, Music, Coffee, GraduationCap, GitCompare, Layers, Workflow, Share2, Clock, Users, Bookmark } from 'lucide-react';
+import { Library, Book, Music, Coffee, GraduationCap, GitCompare, Layers, Workflow, Share2, Clock, Users, Bookmark, Scroll } from 'lucide-react';
 
 interface MenuFooterProps {
     activeView: string;
@@ -50,6 +50,7 @@ export const MenuFooter: React.FC<MenuFooterProps> = ({ activeView, onViewChange
 
     const rightItems = [
         { id: 'devotional', label: 'Daily', icon: Coffee },
+        { id: 'augustine', label: 'Confessions', icon: Scroll },
         { id: 'study', label: 'Study', icon: GraduationCap },
         { id: 'comparison', label: 'Compare', icon: GitCompare },
         { id: 'systematics', label: 'Systematics', icon: Layers },

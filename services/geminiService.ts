@@ -14,9 +14,13 @@ export const DEFAULT_SAFETY_SETTINGS = [
 
 export const getGeminiClient = (): GoogleGenAI => {
   if (!client) {
-    const apiKey = process.env.API_KEY;
+    const apiKey =
+      import.meta.env.VITE_GEMINI_API_KEY ||
+      import.meta.env.VITE_API_KEY ||
+      (typeof process !== 'undefined' ? process.env.GEMINI_API_KEY : undefined) ||
+      (typeof process !== 'undefined' ? process.env.API_KEY : undefined);
     if (!apiKey) {
-      throw new Error("API_KEY environment variable is not set");
+      throw new Error("GEMINI_API_KEY environment variable is not set");
     }
     client = new GoogleGenAI({ apiKey });
   }

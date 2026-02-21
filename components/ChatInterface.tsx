@@ -103,13 +103,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
       if (reference.match(/Institutes|Inst/i)) {
         extraInstruction = ` 
             CONTEXT: The user is studying **John Calvin's Institutes of the Christian Religion**.
-            SOURCE: You MUST use the **John Allen Translation (1813)** provided in your context (Project Gutenberg eBook #45001/64392).
+            SOURCE: You MUST use the **John Allen Translation (1813)** from open-source online directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources).
             REFERENCE: ${reference} (Book.Chapter.Section).
 
             TASK:
-            1. Provide the exact text for ${reference} from your provided primary source context.
+            1. Provide the exact text for ${reference} from verified open-source directories.
             2. Adhere strictly to the John Allen translation. Do NOT paraphrase.
-            3. Do NOT use external Google Search for this text; rely on the provided context.
+            3. Use Google Search to verify the exact section and wording against the open-source source.
             4. Output the text verbatim, including all sub-sections if a chapter is requested.`;
       } else {
         extraInstruction = `
@@ -201,8 +201,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
       const ai = getGeminiClient();
       const prompt = getRetrievalPrompt(reference, type);
 
-      const isInstitutes = reference.match(/Institutes|Inst/i);
-      const tools = isInstitutes ? undefined : [{ googleSearch: {} }];
+      const tools = [{ googleSearch: {} }];
 
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
@@ -252,7 +251,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
               const scriptureRegex = /\b((?:1|2|3|I|II|III)(?:\.|\s)?)?([A-Za-z]+(?:\.|\s[A-Za-z]+)*)\s+(\d+):(\d+)(?:[–-](\d+))?\b/gi;
 
               // Refined Regex for Confessions
-              const confessionRegex = /\b(WCF|WSC|WLC|Heidelberg|HC|Belgic|BC|Canons of Dort|CD|Second Helvetic|2HC|1689 LBCF|LBCF|Institutes|Inst|Westminster Confession(?: of Faith)?|Westminster Shorter Catechism|Westminster Larger Catechism|Heidelberg Catechism|Belgic Confession|Second Helvetic Confession|The Scots Confession|Scots Confession|1689 Baptist Confession)\s+(?:Q\.?|Quest\.?|Question\s|Art\.?|Article\s|Ch\.?|Chap\.?|Chapter\s|Bk\.?|Book\s|Lord's Day\s|Head\s|Section\s|Sec\.?)?\s*\d+(?:[\.:]\d+)*(?:[\.:]\d+)?\b/gi;
+              const confessionRegex = /\b(WCF|WSC|WLC|Heidelberg|HC|Belgic|BC|Canons of Dort|CD|Second Helvetic|2HC|Formula Consensus Helvetica|Formula Helvetica|FCH|1689 LBCF|LBCF|Institutes|Inst|Westminster Confession(?: of Faith)?|Westminster Shorter Catechism|Westminster Larger Catechism|Heidelberg Catechism|Belgic Confession|Second Helvetic Confession|Formula Consensus Helvetica|The Scots Confession|Scots Confession|1689 Baptist Confession)\s+(?:Q\.?|Quest\.?|Question\s|Art\.?|Article\s|Ch\.?|Chap\.?|Chapter\s|Bk\.?|Book\s|Lord's Day\s|Head\s|Section\s|Sec\.?)?\s*\d+(?:[\.:]\d+)*(?:[\.:]\d+)?\b/gi;
 
               // Create a case-insensitive regex for connections
               const connectionsRegex = new RegExp(`\\b(${connectionTitles.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'gi');
@@ -288,7 +287,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
                 const ref = match[0];
                 // Determine type based on which group matched.
                 const isScripture = scriptureRegex.test(ref);
-                const isConfession = !isScripture && /\b(WCF|WSC|WLC|Heidelberg|HC|Belgic|BC|Canons of Dort|CD|Second Helvetic|2HC|1689 LBCF|LBCF|Institutes|Inst|Westminster Confession|Westminster Shorter|Westminster Larger|Belgic|Second Helvetic|Scots Confession|1689 Baptist)/i.test(ref);
+                const isConfession = !isScripture && /\b(WCF|WSC|WLC|Heidelberg|HC|Belgic|BC|Canons of Dort|CD|Second Helvetic|2HC|Formula Consensus Helvetica|Formula Helvetica|FCH|1689 LBCF|LBCF|Institutes|Inst|Westminster Confession|Westminster Shorter|Westminster Larger|Belgic|Second Helvetic|Scots Confession|1689 Baptist)/i.test(ref);
 
                 // Check for connections
                 // We need to match exactly against the titles list to be sure, using the same regex logic
