@@ -53,7 +53,7 @@ export const ScriptureModal: React.FC<ReferenceModalProps> = ({ reference, text,
           `;
 
           const result = await ai.models.generateContent({
-            model: 'gemini-2.0-flash',
+            model: 'gemini-2.5-flash',
             contents: prompt,
             config: {
               responseMimeType: 'application/json',
@@ -108,7 +108,7 @@ export const ScriptureModal: React.FC<ReferenceModalProps> = ({ reference, text,
       }
 
       const result = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-2.5-flash',
         contents: prompt,
         config: {
           temperature: 0.1,
