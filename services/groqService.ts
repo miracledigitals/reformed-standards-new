@@ -19,21 +19,28 @@ export const getGroqClient = (): Groq => {
 };
 
 export const chatCompletion = async (messages: { role: 'user' | 'assistant' | 'system', content: string }[]) => {
-    const groq = getGroqClient();
+    try {
+        const groq = getGroqClient();
 
-    // Prepend system instruction if not present
-    const fullMessages = [
-        { role: 'system', content: INITIAL_SYSTEM_INSTRUCTION },
-        ...messages
-    ];
+        // Prepend system instruction if not present
+        const fullMessages = [
+            { role: 'system', content: INITIAL_SYSTEM_INSTRUCTION },
+            ...messages
+        ];
 
-    const completion = await groq.chat.completions.create({
-        messages: fullMessages as any,
-        model: "llama-3.3-70b-versatile",
-        temperature: 0.1,
-        max_tokens: 8192,
-        stream: true,
-    });
+        console.log("Groq: Starting completion request...");
 
-    return completion;
+        const completion = await groq.chat.completions.create({
+            messages: fullMessages as any,
+            model: "llama-3.3-70b-versatile",
+            temperature: 0.1,
+            max_tokens: 8192,
+            stream: true,
+        });
+
+        return completion;
+    } catch (error) {
+        console.error("Groq: Chat Completion Error", error);
+        throw error;
+    }
 };
