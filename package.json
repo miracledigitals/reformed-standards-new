@@ -12,6 +12,7 @@
     "@google/genai": "^1.30.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.34.0",
+    "groq-sdk": "^0.37.0",
     "lucide-react": "^0.554.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

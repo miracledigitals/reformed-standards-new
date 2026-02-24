@@ -2,8 +2,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Confession, Message, LoadingState, BibleVersion, Hymn, GroundingMetadata } from '../types';
-import { createChatSession, getGeminiClient, DEFAULT_SAFETY_SETTINGS } from '../services/geminiService';
-import { Chat, GenerateContentResponse } from '@google/genai';
+import { chatCompletion, getGroqClient } from '../services/groqService';
 import { Send, BookOpen, RotateCcw, Sparkles, X, Music, Globe, Check, Menu, ChevronLeft, Info, ChevronDown, ChevronUp, List, Scroll, Network } from 'lucide-react';
 import { ScriptureModal } from './ScriptureModal';
 import { getConfessionNavigation, NavItem, DOCTRINAL_CONNECTIONS } from '../constants';
@@ -28,7 +27,6 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  const chatSessionRef = useRef<Chat | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -43,31 +41,23 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
 
   // Initialize chat session
   useEffect(() => {
-    try {
-      chatSessionRef.current = createChatSession();
-
-      if (initialPrompt) {
-        handleSendMessage(initialPrompt, true);
-      } else if (activeConfession) {
-        const initialPrompt = `I am studying the ${activeConfession.title}. Please provide a brief 2-sentence introduction to this document and its historical context.`;
-        handleSendMessage(initialPrompt, true);
-      } else if (activeBible) {
-        const initialPrompt = `I am studying the ${activeBible.title}. Please provide a brief 2-sentence introduction to this translation and its significance to Reformed theology.`;
-        handleSendMessage(initialPrompt, true);
-      } else if (activeHymn) {
-        const initialPrompt = `I want to study the hymn "${activeHymn.title}" by ${activeHymn.author}. Please cross-reference this with https://hymns.countedfaithful.org/numberListing.php if available, or provide the standard text. Provide the lyrics and a brief theological analysis.`;
-        handleSendMessage(initialPrompt, true);
-      } else {
-        setMessages([{
-          role: 'model',
-          text: 'Greetings. I am ready to assist you with the Reformed Standards. You can ask about any doctrine, compare confessions, search for specific topics, or explore the hymnal.'
-        }]);
-      }
-    } catch (error) {
-      console.error("Failed to initialize chat", error);
-      setMessages([{ role: 'model', text: 'Error: Could not connect to the knowledge base. Please check your API key configuration.', isError: true }]);
+    if (initialPrompt) {
+      handleSendMessage(initialPrompt, true);
+    } else if (activeConfession) {
+      const initialPrompt = `I am studying the ${activeConfession.title}. Please provide a brief 2-sentence introduction to this document and its historical context.`;
+      handleSendMessage(initialPrompt, true);
+    } else if (activeBible) {
+      const initialPrompt = `I am studying the ${activeBible.title}. Please provide a brief 2-sentence introduction to this translation and its significance to Reformed theology.`;
+      handleSendMessage(initialPrompt, true);
+    } else if (activeHymn) {
+      const initialPrompt = `I want to study the hymn "${activeHymn.title}" by ${activeHymn.author}. Please cross-reference this with https://hymns.countedfaithful.org/numberListing.php if available, or provide the standard text. Provide the lyrics and a brief theological analysis.`;
+      handleSendMessage(initialPrompt, true);
+    } else {
+      setMessages([{
+        role: 'model',
+        text: 'Greetings. I am ready to assist you with the Reformed Standards. You can ask about any doctrine, compare confessions, search for specific topics, or explore the hymnal.'
+      }]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeConfession, activeBible, activeHymn, initialPrompt]);
 
   // Auto-scroll to bottom
@@ -126,7 +116,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
   };
 
   const handleSendMessage = async (text: string, isSystemInit: boolean = false, displayText?: string) => {
-    if (!text.trim() || !chatSessionRef.current) return;
+    if (!text.trim()) return;
 
     // UI shows displayText if present, otherwise text
     const messageToShow = displayText || text;
@@ -142,28 +132,26 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
     try {
       setMessages(prev => [...prev, { role: 'model', text: '' }]);
 
-      const result = await chatSessionRef.current.sendMessageStream({ message: text });
+      // Map messages to Groq format
+      const history = messages.map(msg => ({
+        role: (msg.role === 'model' ? 'assistant' : 'user') as 'assistant' | 'user',
+        content: msg.text
+      }));
+
+      const stream = await chatCompletion([...history, { role: 'user', content: text }]);
 
       let fullResponse = '';
-      let finalMetadata: GroundingMetadata | undefined = undefined;
 
-      for await (const chunk of result) {
-        const c = chunk as GenerateContentResponse;
-        const chunkText = c.text || '';
-        fullResponse += chunkText;
-
-        if (c.candidates?.[0]?.groundingMetadata) {
-          finalMetadata = c.candidates[0].groundingMetadata;
-        }
+      for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content || "";
+        fullResponse += content;
 
         setMessages(prev => {
           const newMessages = [...prev];
           const lastIndex = newMessages.length - 1;
-          // Create a new object for the last message to avoid direct mutation of the previous state object
           newMessages[lastIndex] = {
             ...newMessages[lastIndex],
-            text: fullResponse,
-            groundingMetadata: finalMetadata
+            text: fullResponse
           };
           return newMessages;
         });
@@ -198,23 +186,15 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
     setIsMobileSidebarOpen(false);
 
     try {
-      const ai = getGeminiClient();
       const prompt = getRetrievalPrompt(reference, type);
+      const stream = await chatCompletion([{ role: 'user', content: prompt }]);
 
-      const tools = [{ googleSearch: {} }];
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt,
-        config: {
-          maxOutputTokens: 8192,
-          temperature: 0.1, // Low temp for accuracy
-          tools: tools,
-          safetySettings: [...DEFAULT_SAFETY_SETTINGS]
-        }
-      });
-      const text = response.text || "Could not retrieve text.";
-      setModalData({ reference, text, type, version: type === 'scripture' ? activeVersionName : undefined, loading: false });
+      let fullResponse = '';
+      for await (const chunk of stream) {
+        fullResponse += chunk.choices[0]?.delta?.content || "";
+        setModalData(prev => prev ? { ...prev, text: fullResponse } : null);
+      }
+      setModalData(prev => prev ? { ...prev, loading: false } : null);
     } catch (error) {
       setModalData({ reference, text: "Error retrieving content.", type, loading: false });
     }
@@ -325,8 +305,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
                       key={`${i}-${ref}`}
                       onClick={() => fetchReferenceText(ref, type)}
                       className={`inline-flex items-center gap-1 font-bold hover:underline decoration-reformed-400 underline-offset-2 px-1.5 py-0.5 rounded-md cursor-pointer transition-colors text-xs sm:text-sm align-baseline mx-0.5 transform active:scale-95 ${type === 'scripture'
-                          ? 'text-reformed-700 dark:text-reformed-300 bg-reformed-100 dark:bg-reformed-800 hover:bg-reformed-200 dark:hover:bg-reformed-700 border border-reformed-200 dark:border-reformed-700'
-                          : 'text-amber-800 dark:text-amber-200 bg-amber-50 dark:bg-amber-900/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800/50'
+                        ? 'text-reformed-700 dark:text-reformed-300 bg-reformed-100 dark:bg-reformed-800 hover:bg-reformed-200 dark:hover:bg-reformed-700 border border-reformed-200 dark:border-reformed-700'
+                        : 'text-amber-800 dark:text-amber-200 bg-amber-50 dark:bg-amber-900/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800/50'
                         }`}
                       title={`Read ${type === 'scripture' ? 'Verse' : 'Section'}`}
                     >
@@ -625,7 +605,6 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
               <button
                 onClick={() => {
                   setMessages([]);
-                  chatSessionRef.current = createChatSession();
                   if (initialPrompt) {
                     handleSendMessage(initialPrompt, true);
                   } else if (activeConfession) {
