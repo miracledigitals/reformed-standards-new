@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { CONFESSIONS } from '../constants';
 import { Confession, LoadingState } from '../types';
-import { getGeminiClient, DEFAULT_SAFETY_SETTINGS } from '../services/geminiService';
+import { generateText } from '../services/groqService';
 // Added ChevronDown to imports to fix "Cannot find name 'ChevronDown'" errors
 import { GitCompare, ArrowRight, Loader2, Sparkles, BookOpen, Scroll, ChevronDown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -25,8 +25,7 @@ export const ParallelComparison: React.FC = () => {
     setComparison(null);
 
     try {
-      const ai = getGeminiClient();
-      const prompt = `
+      const comparisonPrompt = `
         Perform a high-level theological comparison between two Reformed standards on a specific topic.
         
         Document A: ${doc1.title} (${doc1.author}, ${doc1.date})
@@ -43,43 +42,13 @@ export const ParallelComparison: React.FC = () => {
         Format: Professional, academic, and formatted in clear Markdown. Use the John Allen 1813 translation for any 'Institutes' references.
       `;
 
-      const safetySettings = [...DEFAULT_SAFETY_SETTINGS];
+      const result = await generateText(
+        comparisonPrompt,
+        undefined,
+        0.2
+      );
 
-      let text: string | undefined;
-
-      // Attempt 1: With Search Grounding
-      try {
-        const response = await ai.models.generateContent({
-          model: 'gemini-3.1-pro-preview',
-          contents: prompt + " Use Google Search to verify citations.",
-          config: {
-            temperature: 0.2,
-            maxOutputTokens: 8192,
-            tools: [{ googleSearch: {} }],
-            safetySettings: safetySettings
-          }
-        });
-        text = response.text;
-      } catch (e) {
-        console.warn("Primary comparison attempt failed, trying fallback...", e);
-      }
-
-      // Attempt 2: Fallback without Search
-      if (!text) {
-        console.log("Retrying comparison without search tools...");
-        const response = await ai.models.generateContent({
-          model: 'gemini-3.1-pro-preview',
-          contents: prompt,
-          config: {
-            temperature: 0.3,
-            maxOutputTokens: 8192,
-            safetySettings: safetySettings
-          }
-        });
-        text = response.text;
-      }
-
-      setComparison(text || "Comparison failed. Please try again.");
+      setComparison(result.text || "Comparison failed. Please try again.");
     } catch (error) {
       console.error(error);
       setComparison("An error occurred during the comparison.");

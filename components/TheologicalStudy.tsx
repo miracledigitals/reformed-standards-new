@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { getGeminiClient, DEFAULT_SAFETY_SETTINGS } from '../services/geminiService';
+import { generateText } from '../services/groqService';
 import { STUDY_SYSTEM_INSTRUCTION, THEOLOGICAL_TOPICS } from '../constants';
 import ReactMarkdown from 'react-markdown';
 import { GraduationCap, Calendar, RotateCcw, BookOpen, Scroll, PenTool, Bookmark, Check, Copy } from 'lucide-react';
@@ -54,49 +54,17 @@ export const TheologicalStudy: React.FC = () => {
         2. Do not generalize; cite specific articles (e.g., "Belgic Confession Art. 12" vs "WCF 4.1").
       `;
 
-    const ai = getGeminiClient();
-
-    const safetySettings = [...DEFAULT_SAFETY_SETTINGS];
-
     let text: string | undefined;
 
-    // Attempt 1: High quality with Search
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt + " Use Google Search to verify citations.",
-        config: {
-          systemInstruction: STUDY_SYSTEM_INSTRUCTION,
-          temperature: 0.1, // High determinism for academic work
-          maxOutputTokens: 8192,
-          tools: [{ googleSearch: {} }],
-          safetySettings: safetySettings
-        },
-      });
-      text = response.text;
+      const result = await generateText(
+        prompt,
+        STUDY_SYSTEM_INSTRUCTION,
+        0.1
+      );
+      text = result.text;
     } catch (e) {
-      console.warn("Attempt 1 failed", e);
-    }
-
-    // Attempt 2: Fallback without Search
-    if (!text) {
-      console.log("Retrying study generation without search...");
-      try {
-        const response = await ai.models.generateContent({
-          model: 'gemini-3.1-pro-preview',
-          contents: prompt,
-          config: {
-            systemInstruction: STUDY_SYSTEM_INSTRUCTION,
-            temperature: 0.3,
-            maxOutputTokens: 8192,
-            // No tools
-            safetySettings: safetySettings
-          },
-        });
-        text = response.text;
-      } catch (e) {
-        console.error("Attempt 2 failed", e);
-      }
+      console.warn("Theological study generation failed", e);
     }
 
     if (text) {

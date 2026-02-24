@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { getGeminiClient, DEFAULT_SAFETY_SETTINGS } from '../services/geminiService';
+import { generateText } from '../services/groqService';
 import { AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION } from '../constants';
 import ReactMarkdown from 'react-markdown';
 import { Scroll, Calendar, Copy, RotateCcw, Bookmark, Check } from 'lucide-react';
@@ -191,55 +191,19 @@ export const DailyConfessions: React.FC = () => {
         3. Do not add commentary or summaries.
       `;
 
-    const ai = getGeminiClient();
-
     let text: string | undefined;
     let lastError: unknown;
 
     try {
-      const ccelText = await fetchCcelChapter(selectedBook, chapterRoman);
-      if (ccelText) {
-        text = ccelText;
-      }
+      const result = await generateText(
+        prompt,
+        AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION,
+        0.2
+      );
+      text = result.text;
     } catch (error) {
       lastError = error;
-    }
-
-    try {
-      if (!text) {
-        const response = await ai.models.generateContent({
-          model: 'gemini-3.1-pro-preview',
-          contents: prompt + " Use Google Search to verify the text.",
-          config: {
-            systemInstruction: AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION,
-            temperature: 0.2,
-            maxOutputTokens: 8192,
-            tools: [{ googleSearch: {} }],
-            safetySettings: [...DEFAULT_SAFETY_SETTINGS]
-          },
-        });
-        text = response.text;
-      }
-    } catch (error) {
-      lastError = error;
-    }
-
-    if (!text) {
-      try {
-        const response = await ai.models.generateContent({
-          model: 'gemini-3.1-pro-preview',
-          contents: prompt,
-          config: {
-            systemInstruction: AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION,
-            temperature: 0.2,
-            maxOutputTokens: 8192,
-            safetySettings: [...DEFAULT_SAFETY_SETTINGS]
-          },
-        });
-        text = response.text;
-      } catch (error) {
-        lastError = error;
-      }
+      console.warn("Confessions reading generation failed", error);
     }
 
     if (text) {

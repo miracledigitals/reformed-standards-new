@@ -4,7 +4,7 @@ import { CONFESSIONS } from '../constants';
 import { Confession } from '../types';
 import { Book, Calendar, Users, ArrowRight, ChevronDown, RotateCcw, Search, Bookmark, Check, CloudDownload, Loader2 } from 'lucide-react';
 import { saveItem, isItemSaved, removeItem, getSavedItems } from '../services/storageService';
-import { getGeminiClient } from '../services/geminiService';
+import { generateText } from '../services/groqService';
 import { motion, Variants } from 'framer-motion';
 
 interface LibraryProps {
@@ -111,25 +111,21 @@ export const Library: React.FC<LibraryProps> = ({ onSelectConfession, onViewChan
     setDownloadingId(confession.id);
 
     try {
-      const ai = getGeminiClient();
-      let prompt = "";
+      let downloadPrompt = "";
 
       if (confession.id === 'institutes') {
-        prompt = `Provide the COMPLETE verbatim text of Calvin's Institutes (Summary of all 4 Books) using the John Allen Translation (1813). Use Google Search to verify against open-source directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources). Since the full text is too large for one output, provide a comprehensive structured digest containing the text of the primary sections for Book 1 through 4.`;
+        downloadPrompt = `Provide the COMPLETE verbatim text of Calvin's Institutes (Summary of all 4 Books) using the John Allen Translation (1813). Provide a comprehensive structured digest containing the text of the primary sections for Book 1 through 4.`;
       } else {
-        prompt = `Provide the COMPLETE verbatim text of the ${confession.title}. Include all Articles or Chapters. Use Google Search to ensure 100% accuracy to the original document. Output as a clear Markdown document.`;
+        downloadPrompt = `Provide the COMPLETE verbatim text of the ${confession.title}. Include all Articles or Chapters. Ensure 100% accuracy to the original document. Output as a clear Markdown document.`;
       }
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt,
-        config: {
-          temperature: 0.1,
-          tools: [{ googleSearch: {} }]
-        }
-      });
+      const result = await generateText(
+        downloadPrompt,
+        undefined,
+        0.1
+      );
 
-      if (response.text) {
+      if (result.text) {
         saveItem({
           type: 'confession',
           refId: confession.id,
@@ -137,7 +133,7 @@ export const Library: React.FC<LibraryProps> = ({ onSelectConfession, onViewChan
           subtitle: confession.author,
           tags: [...confession.tags, 'Offline'],
           userNotes: 'Downloaded for offline study.',
-          content: response.text,
+          content: result.text,
           isOffline: true
         });
         setSavedIds(prev => Array.from(new Set([...prev, confession.id])));

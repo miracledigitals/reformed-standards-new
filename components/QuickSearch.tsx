@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Search, ArrowRight, BookOpen, Loader2, ChevronRight, Tag } from 'lucide-react';
-import { getGeminiClient, DEFAULT_SAFETY_SETTINGS } from '../services/geminiService';
+import { generateText } from '../services/groqService';
 import { INITIAL_SYSTEM_INSTRUCTION } from '../constants';
 import ReactMarkdown from 'react-markdown';
 import { commonMarkdownComponents } from './MarkdownComponents';
@@ -79,8 +79,7 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({ isOpen, onClose }) => 
     setFullText(null);
 
     try {
-      const ai = getGeminiClient();
-      const prompt = `
+      const searchPrompt = `
         Search for the theological term: "${searchTerm}" across the Reformed Standards (Westminster, Three Forms of Unity, 2nd Helvetic, Institutes).
         Identify the top 5 most relevant sections.
         Also suggest 3-5 related theological terms that a student might want to explore next.
@@ -100,19 +99,14 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({ isOpen, onClose }) => 
         Ensure references are accurate and exist in the original texts. Do not guess; omit anything you cannot verify from open-source directories.
       `;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt,
-        config: {
-          systemInstruction: INITIAL_SYSTEM_INSTRUCTION,
-          responseMimeType: 'application/json',
-          temperature: 0.1,
-          // tools: [{ googleSearch: {} }], // Tools unsupported with JSON response mime type
-          safetySettings: [...DEFAULT_SAFETY_SETTINGS]
-        },
-      });
+      const result = await generateText(
+        searchPrompt,
+        INITIAL_SYSTEM_INSTRUCTION,
+        0.1,
+        { type: 'json_object' }
+      );
 
-      const text = response.text;
+      const text = result.text;
       if (text) {
         const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
         const data = JSON.parse(cleanText) as SearchResponse;
@@ -139,24 +133,20 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({ isOpen, onClose }) => 
     setFullText(null);
 
     try {
-      const ai = getGeminiClient();
-
-      let prompt = "";
-      let tools: any[] | undefined = [{ googleSearch: {} }];
+      let retrievalPrompt = "";
 
       if (result.document.toLowerCase().includes("institutes")) {
-        prompt = `
+        retrievalPrompt = `
             You are a Theological Research Assistant.
             The user wants the verbatim text for: ${result.document} ${result.reference}.
             
             TASK:
             1. Retrieve the text of Calvin's Institutes ${result.reference} using the **John Allen Translation (1813)**.
-            2. Use Google Search to verify the exact text against open-source directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources).
-            3. Verify the Book, Chapter, and Section numbers match the source text.
-            4. Output the text verbatim.
+            2. Verify the Book, Chapter, and Section numbers match the source text.
+            3. Output the text verbatim.
           `;
       } else {
-        prompt = `
+        retrievalPrompt = `
             Quote the following text verbatim from the original historical document:
             Document: ${result.document}
             Reference: ${result.reference}
@@ -164,20 +154,16 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({ isOpen, onClose }) => 
             Return ONLY the text (and Question/Answer if applicable). Do not add commentary.
             
             VERIFICATION:
-            1. USE THE GOOGLE SEARCH TOOL to verify that the text matches the citation.
+            1. Ensure that the text matches the citation.
             2. Check the reference. If the text does not match the reference, find the correct reference for that text or return "Unable to verify text at this location."
           `;
       }
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt,
-        config: {
-          temperature: 0.1,
-          tools: tools,
-          safetySettings: [...DEFAULT_SAFETY_SETTINGS]
-        }
-      });
+      const response = await generateText(
+        retrievalPrompt,
+        undefined,
+        0.1
+      );
 
       setFullText(response.text || "Could not retrieve text.");
     } catch (error) {
@@ -319,7 +305,7 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({ isOpen, onClose }) => 
 
         <div className="bg-reformed-100 dark:bg-reformed-950 p-2 border-t border-reformed-200 dark:border-reformed-800 flex justify-end shrink-0">
           <span className="text-[10px] text-reformed-400 dark:text-reformed-600 font-sans mr-2">
-            Powered by Gemini AI • Verified against original standards
+            Powered by Llama AI • Verified against original standards
           </span>
         </div>
       </div>

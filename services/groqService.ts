@@ -44,3 +44,30 @@ export const chatCompletion = async (messages: { role: 'user' | 'assistant' | 's
         throw error;
     }
 };
+export const generateText = async (prompt: string, systemInstruction?: string, temperature: number = 0.1, responseFormat?: { type: 'json_object' }) => {
+    try {
+        const groq = getGroqClient();
+
+        const messages = [];
+        if (systemInstruction) {
+            messages.push({ role: 'system', content: systemInstruction });
+        }
+        messages.push({ role: 'user', content: prompt });
+
+        const completion = await groq.chat.completions.create({
+            messages: messages as any,
+            model: "llama-3.3-70b-versatile",
+            temperature: temperature,
+            max_tokens: 8192,
+            stream: false,
+            response_format: responseFormat,
+        });
+
+        return {
+            text: completion.choices[0]?.message?.content || ""
+        };
+    } catch (error) {
+        console.error("Groq: Generate Text Error", error);
+        throw error;
+    }
+};

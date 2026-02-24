@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { getGeminiClient, DEFAULT_SAFETY_SETTINGS } from '../services/geminiService';
+import { generateText } from '../services/groqService';
 import { DEVOTIONAL_SYSTEM_INSTRUCTION } from '../constants';
 import ReactMarkdown from 'react-markdown';
 import { Sun, Calendar, Copy, RotateCcw, Bookmark, Check } from 'lucide-react';
@@ -67,32 +67,23 @@ export const DailyDevotional: React.FC = () => {
         4. Follow the system instruction for structure.
       `;
 
-    const ai = getGeminiClient();
-
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt + " Use Google Search to verify the text.",
-        config: {
-          systemInstruction: DEVOTIONAL_SYSTEM_INSTRUCTION,
-          temperature: 0.4,
-          maxOutputTokens: 8192,
-          tools: [{ googleSearch: {} }],
-          safetySettings: [...DEFAULT_SAFETY_SETTINGS]
-        },
-      });
+      const result = await generateText(
+        prompt,
+        DEVOTIONAL_SYSTEM_INSTRUCTION,
+        0.4
+      );
 
-      if (response.text) {
-        setContent(response.text);
-        localStorage.setItem(`devotional-${dateKey}`, response.text);
+      if (result.text) {
+        setContent(result.text);
+        localStorage.setItem(`devotional-${dateKey}`, result.text);
         setLoading(false);
         return;
       }
       throw new Error("Empty response from primary generation");
 
     } catch (error) {
-      console.warn("Devotional generation failed, attempting fallback...", error);
-      // Fallback logic could go here...
+      console.warn("Devotional generation failed", error);
       setContent("### Grace and Peace\n\nWe are currently unable to retrieve today's devotional due to a connection issue. Please consult Scripture directly: *The Lord is my shepherd; I shall not want.* (Psalm 23:1)");
       setLoading(false);
     }
@@ -197,8 +188,8 @@ export const DailyDevotional: React.FC = () => {
             <button
               onClick={handleToggleSave}
               className={`p-2 rounded-full transition-colors ${isSaved
-                  ? 'bg-reformed-800 text-white hover:bg-reformed-700'
-                  : 'text-reformed-500 hover:text-reformed-900 hover:bg-reformed-200 dark:text-reformed-400 dark:hover:text-white dark:hover:bg-reformed-800'
+                ? 'bg-reformed-800 text-white hover:bg-reformed-700'
+                : 'text-reformed-500 hover:text-reformed-900 hover:bg-reformed-200 dark:text-reformed-400 dark:hover:text-white dark:hover:bg-reformed-800'
                 }`}
               title={isSaved ? "Remove Bookmark" : "Bookmark this"}
             >

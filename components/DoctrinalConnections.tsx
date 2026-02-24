@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { DOCTRINAL_CONNECTIONS } from '../constants';
 import { ConnectionType, DoctrinalCategory } from '../types';
 import { ArrowRight, RotateCcw, Filter, Network, Scale, ShieldCheck, ArrowLeft, Loader2, Scroll, Printer, ChevronRight, Bookmark, Copy, Check } from 'lucide-react';
-import { getGeminiClient, DEFAULT_SAFETY_SETTINGS } from '../services/geminiService';
+import { generateText } from '../services/groqService';
 import ReactMarkdown from 'react-markdown';
 import { commonMarkdownComponents } from './MarkdownComponents';
 import { saveItem, isItemSaved, removeItem, getSavedItems } from '../services/storageService';
@@ -82,7 +82,6 @@ export const DoctrinalConnections: React.FC<DoctrinalConnectionsProps> = ({ init
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
         try {
-            const ai = getGeminiClient();
             const prompt = `
             Act as a Reformed Theologian and Professor. Provide a detailed theological analysis of the doctrine: "${concept.title}" (Category: ${concept.category}).
             Context Description: ${concept.description}
@@ -106,41 +105,17 @@ export const DoctrinalConnections: React.FC<DoctrinalConnectionsProps> = ({ init
             Tone: Academic, reverent, and strictly Reformed (Confessional).
         `;
 
-            const safetySettings = [...DEFAULT_SAFETY_SETTINGS];
-
             let text: string | undefined;
 
-            // Attempt 1: With Search
             try {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-3.1-pro-preview',
-                    contents: prompt,
-                    config: {
-                        temperature: 0.2,
-                        maxOutputTokens: 8192,
-                        tools: [{ googleSearch: {} }],
-                        safetySettings: safetySettings
-                    }
-                });
-                text = response.text;
+                const result = await generateText(
+                    prompt,
+                    undefined,
+                    0.2
+                );
+                text = result.text;
             } catch (e) {
-                console.warn("Primary generation attempt failed", e);
-            }
-
-            // Attempt 2: Fallback (No Search)
-            if (!text) {
-                console.log("Retrying without search...");
-                const response = await ai.models.generateContent({
-                    model: 'gemini-3.1-pro-preview',
-                    contents: prompt,
-                    config: {
-                        temperature: 0.3,
-                        maxOutputTokens: 8192,
-                        // No tools
-                        safetySettings: safetySettings
-                    }
-                });
-                text = response.text;
+                console.warn("Generation attempt failed", e);
             }
 
             setConceptDetails(text || "Unable to generate details. Please try again.");

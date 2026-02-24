@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { SYSTEMATIC_THEOLOGY_STRUCTURE } from '../constants';
 import { ChevronRight, ChevronDown, BookOpen, Layers, Menu, X, Loader2, Bookmark, Check, Copy } from 'lucide-react';
-import { getGeminiClient, DEFAULT_SAFETY_SETTINGS } from '../services/geminiService';
+import { generateText } from '../services/groqService';
 import ReactMarkdown from 'react-markdown';
 import { commonMarkdownComponents } from './MarkdownComponents';
 import { saveItem, isItemSaved, removeItem, getSavedItems } from '../services/storageService';
@@ -85,37 +85,15 @@ export const SystematicTheologyBrowser: React.FC = () => {
 
             let text: string | undefined;
 
-            // Attempt 1: With Search Grounding
             try {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-3.1-pro-preview',
-                    contents: prompt + " Use Google Search to verify citations.",
-                    config: {
-                        temperature: 0.3,
-                        maxOutputTokens: 8192,
-                        tools: [{ googleSearch: {} }],
-                        safetySettings: safetySettings
-                    }
-                });
-                text = response.text;
+                const result = await generateText(
+                    prompt,
+                    undefined,
+                    0.3
+                );
+                text = result.text;
             } catch (e) {
-                console.warn("Primary generation attempt failed, trying fallback...", e);
-            }
-
-            // Attempt 2: Fallback to Internal Knowledge (No Search) if Attempt 1 failed or returned empty
-            if (!text) {
-                console.log("Attempting fallback generation without search tools...");
-                const response = await ai.models.generateContent({
-                    model: 'gemini-3.1-pro-preview',
-                    contents: prompt, // Removed search instruction
-                    config: {
-                        temperature: 0.4,
-                        maxOutputTokens: 8192,
-                        // No tools provided here to avoid search-related blocks
-                        safetySettings: safetySettings
-                    }
-                });
-                text = response.text;
+                console.warn("Generation attempt failed", e);
             }
 
             if (!text) {

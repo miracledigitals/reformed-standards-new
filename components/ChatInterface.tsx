@@ -5,7 +5,7 @@ import { Confession, Message, LoadingState, BibleVersion, Hymn, GroundingMetadat
 import { chatCompletion, getGroqClient } from '../services/groqService';
 import { Send, BookOpen, RotateCcw, Sparkles, X, Music, Globe, Check, Menu, ChevronLeft, Info, ChevronDown, ChevronUp, List, Scroll, Network } from 'lucide-react';
 import { ScriptureModal } from './ScriptureModal';
-import { getConfessionNavigation, NavItem, DOCTRINAL_CONNECTIONS } from '../constants';
+import { getConfessionNavigation, NavItem, DOCTRINAL_CONNECTIONS, INITIAL_SYSTEM_INSTRUCTION } from '../constants';
 import { commonMarkdownComponents } from './MarkdownComponents';
 
 interface ChatInterfaceProps {

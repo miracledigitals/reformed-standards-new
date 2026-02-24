@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { X, BookOpen, Scroll, Link, Loader2, ExternalLink, Globe, Languages, RotateCcw } from 'lucide-react';
-import { getGeminiClient, DEFAULT_SAFETY_SETTINGS } from '../services/geminiService';
+import { generateText } from '../services/groqService';
 import ReactMarkdown from 'react-markdown';
 import { commonMarkdownComponents } from './MarkdownComponents';
 import { BIBLE_APPS } from '../services/bibleLinkService';
@@ -43,7 +43,6 @@ export const ScriptureModal: React.FC<ReferenceModalProps> = ({ reference, text,
         setRefsLoading(true);
         setCrossRefs([]);
         try {
-          const ai = getGeminiClient();
           const prompt = `
             Analyze the following confession reference: "${reference}".
             Based on its topic, provide 3-5 distinct theological cross-references from OTHER Reformed Standards (e.g., if WCF, link to Heidelberg/Belgic/2nd Helvetic).
@@ -52,15 +51,12 @@ export const ScriptureModal: React.FC<ReferenceModalProps> = ({ reference, text,
             Do not include any other text.
           `;
 
-          const result = await ai.models.generateContent({
-            model: 'gemini-3.1-pro-preview',
-            contents: prompt,
-            config: {
-              responseMimeType: 'application/json',
-              temperature: 0.1,
-              safetySettings: [...DEFAULT_SAFETY_SETTINGS]
-            }
-          });
+          const result = await generateText(
+            prompt,
+            undefined, // No specific system instruction needed here beyond what's in prompt
+            0.1,
+            { type: 'json_object' }
+          );
 
           if (result.text) {
             const data = JSON.parse(result.text);
@@ -94,7 +90,6 @@ export const ScriptureModal: React.FC<ReferenceModalProps> = ({ reference, text,
     setActiveTab(tab);
 
     try {
-      const ai = getGeminiClient();
       let prompt = "";
       const testament = getTestament();
 
@@ -107,14 +102,11 @@ export const ScriptureModal: React.FC<ReferenceModalProps> = ({ reference, text,
         prompt = `Provide the verbatim Latin text for ${reference} from the Clementine Vulgate. Return only the verse text.`;
       }
 
-      const result = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt,
-        config: {
-          temperature: 0.1,
-          safetySettings: [...DEFAULT_SAFETY_SETTINGS]
-        }
-      });
+      const result = await generateText(
+        prompt,
+        undefined,
+        0.1
+      );
 
       if (tab === 'interlinear') setInterlinearText(result.text || "No data.");
       if (tab === 'latin') setLatinText(result.text || "No data.");

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { getGeminiClient } from '../services/geminiService';
+import { generateText } from '../services/groqService';
 import { LoadingState } from '../types';
 import { Search, Share2, Loader2, Sparkles, Book, Scroll, ChevronRight, Bookmark, Copy, Check, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -43,8 +43,7 @@ export const CrossReferenceVisualizer: React.FC = () => {
     setResults([]);
 
     try {
-      const ai = getGeminiClient();
-      const prompt = `
+      const crossRefPrompt = `
         Identify every major Reformed standard (WCF, WSC, WLC, Heidelberg, Belgic, Canons of Dort, 2nd Helvetic, 1689 LBCF, Institutes) that explicitly cites or is primarily grounded in the following Bible verse: "${verse}".
         
         Return a JSON array of objects with this structure:
@@ -59,23 +58,14 @@ export const CrossReferenceVisualizer: React.FC = () => {
         Use the John Allen 1813 translation for any 'Institutes' references found, verified against open-source directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources).
       `;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt,
-        config: {
-          responseMimeType: 'application/json',
-          temperature: 0.1,
-          tools: [{ googleSearch: {} }],
-          safetySettings: [
-            { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-            { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-            { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-          ]
-        }
-      });
+      const result = await generateText(
+        crossRefPrompt,
+        undefined,
+        0.1,
+        { type: 'json_object' }
+      );
 
-      const text = response.text;
+      const text = result.text;
       if (text) {
         const data = JSON.parse(text);
         setResults(data);
@@ -92,34 +82,23 @@ export const CrossReferenceVisualizer: React.FC = () => {
     setModalData({ reference: fullRef, text: '', type: 'confession', loading: true });
 
     try {
-      const ai = getGeminiClient();
-      let prompt = "";
-      let tools: any[] | undefined = [{ googleSearch: {} }];
+      let contextPrompt = "";
 
       if (res.document.toLowerCase().includes("institutes")) {
-        prompt = `Provide the verbatim text of Calvin's Institutes ${res.reference} using the John Allen Translation (1813). Use Google Search to verify against open-source directories (Project Gutenberg eBook #45001/64392 or equivalent public-domain sources). Output text only.`;
+        contextPrompt = `Provide the verbatim text of Calvin's Institutes ${res.reference} using the John Allen Translation (1813). Output text only.`;
       } else {
-        prompt = `Quote the full text of ${res.document} ${res.reference} verbatim. Use Google Search to verify accuracy. Include the Question if it is a Catechism.`;
+        contextPrompt = `Quote the full text of ${res.document} ${res.reference} verbatim. Include the Question if it is a Catechism.`;
       }
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
-        contents: prompt,
-        config: {
-          temperature: 0.1,
-          tools: tools,
-          safetySettings: [
-            { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-            { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-            { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-          ]
-        }
-      });
+      const result = await generateText(
+        contextPrompt,
+        undefined,
+        0.1
+      );
 
       setModalData({
         reference: fullRef,
-        text: response.text || "Could not retrieve text.",
+        text: result.text || "Could not retrieve text.",
         type: 'confession',
         loading: false
       });
