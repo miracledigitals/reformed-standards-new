@@ -1,73 +1,81 @@
-import Groq from "groq-sdk";
+
+import { GoogleGenAI } from "@google/genai";
 import { INITIAL_SYSTEM_INSTRUCTION } from "../constants";
 
-let client: Groq | null = null;
+let client: GoogleGenAI | null = null;
 
-export const getGroqClient = (): Groq => {
+export const getGroqClient = (): GoogleGenAI => {
     if (!client) {
-        const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+        const apiKey =
+            import.meta.env.VITE_GEMINI_API_KEY ||
+            import.meta.env.VITE_API_KEY ||
+            (typeof process !== 'undefined' ? process.env.GEMINI_API_KEY : undefined) ||
+            (typeof process !== 'undefined' ? process.env.API_KEY : undefined);
 
         if (!apiKey) {
-            throw new Error("VITE_GROQ_API_KEY environment variable is not set. Please ensure you have it in your .env or .env.local file.");
+            throw new Error("GEMINI_API_KEY environment variable is not set. Please ensure you have it in your .env or .env.local file.");
         }
-        client = new Groq({
-            apiKey,
-            dangerouslyAllowBrowser: true // Necessary for client-side Vite apps
-        });
+        client = new GoogleGenAI({ apiKey });
     }
     return client;
 };
 
 export const chatCompletion = async (messages: { role: 'user' | 'assistant' | 'system', content: string }[]) => {
     try {
-        const groq = getGroqClient();
+        const ai = getGroqClient();
 
-        // Prepend system instruction if not present
-        const fullMessages = [
-            { role: 'system', content: INITIAL_SYSTEM_INSTRUCTION },
-            ...messages
-        ];
+        console.log("Gemini: Starting completion request...");
 
-        console.log("Groq: Starting completion request...");
+        const systemMessage = messages.find(m => m.role === 'system');
+        const otherMessages = messages.filter(m => m.role !== 'system');
 
-        const completion = await groq.chat.completions.create({
-            messages: fullMessages as any,
-            model: "llama-3.3-70b-versatile",
-            temperature: 0.1,
-            max_tokens: 8192,
-            stream: true,
+        const contents = otherMessages.map(m => ({
+            role: m.role as 'user' | 'model',
+            parts: [{ text: m.content }]
+        }));
+
+        const stream = await ai.models.generateContentStream({
+            model: 'gemini-3.1',
+            contents,
+            config: {
+                systemInstruction: systemMessage?.content || INITIAL_SYSTEM_INSTRUCTION,
+                temperature: 0.1,
+                maxOutputTokens: 8192,
+                tools: [{ googleSearch: {} }],
+            }
         });
 
-        return completion;
+        return stream;
     } catch (error) {
-        console.error("Groq: Chat Completion Error", error);
+        console.error("Gemini: Chat Completion Error", error);
         throw error;
     }
 };
+
 export const generateText = async (prompt: string, systemInstruction?: string, temperature: number = 0.1, responseFormat?: { type: 'json_object' }) => {
     try {
-        const groq = getGroqClient();
+        const ai = getGroqClient();
 
-        const messages = [];
-        if (systemInstruction) {
-            messages.push({ role: 'system', content: systemInstruction });
-        }
-        messages.push({ role: 'user', content: prompt });
+        const fullSystemInstruction = systemInstruction || INITIAL_SYSTEM_INSTRUCTION;
 
-        const completion = await groq.chat.completions.create({
-            messages: messages as any,
-            model: "llama-3.3-70b-versatile",
-            temperature: temperature,
-            max_tokens: 8192,
-            stream: false,
-            response_format: responseFormat,
+        console.log("Gemini: Starting generate text request...");
+
+        const result = await ai.models.generateContent({
+            model: 'gemini-3.1',
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+            config: {
+                systemInstruction: fullSystemInstruction,
+                temperature,
+                maxOutputTokens: 8192,
+                responseModalities: responseFormat?.type === 'json_object' ? ['text'] as any : undefined,
+            }
         });
 
         return {
-            text: completion.choices[0]?.message?.content || ""
+            text: result.text || ""
         };
     } catch (error) {
-        console.error("Groq: Generate Text Error", error);
+        console.error("Gemini: Generate Text Error", error);
         throw error;
     }
 };
