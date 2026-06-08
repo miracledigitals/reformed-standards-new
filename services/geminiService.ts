@@ -54,19 +54,36 @@ export const chatCompletion = async (messages: { role: 'user' | 'assistant' | 's
       parts: [{ text: m.content }]
     }));
 
-    const stream = await ai.models.generateContentStream({
-      model: 'gemini-3.5-flash',
-      contents,
-      config: {
-        systemInstruction: systemMessage?.content || INITIAL_SYSTEM_INSTRUCTION,
-        temperature: 0.1,
-        maxOutputTokens: 8192,
-        tools: [{ googleSearch: {} }],
-        safetySettings: [...DEFAULT_SAFETY_SETTINGS]
-      }
-    });
-
-    return stream;
+    try {
+      const stream = await ai.models.generateContentStream({
+        model: 'gemini-3.5-flash',
+        contents,
+        config: {
+          systemInstruction: systemMessage?.content || INITIAL_SYSTEM_INSTRUCTION,
+          temperature: 0.1,
+          maxOutputTokens: 8192,
+          tools: [{ googleSearch: {} }],
+          safetySettings: [...DEFAULT_SAFETY_SETTINGS]
+        }
+      });
+      return stream;
+    } catch (innerError: any) {
+      const errStr = String(innerError.message || innerError);
+      console.warn("Gemini stream error occurred:", errStr);
+      // Fallback if the user has a free tier key or has hit a billing/grounding limit
+      console.warn("Gemini: Retrying stream completion without Google Search tool...");
+      const stream = await ai.models.generateContentStream({
+        model: 'gemini-3.5-flash',
+        contents,
+        config: {
+          systemInstruction: systemMessage?.content || INITIAL_SYSTEM_INSTRUCTION,
+          temperature: 0.1,
+          maxOutputTokens: 8192,
+          safetySettings: [...DEFAULT_SAFETY_SETTINGS]
+        }
+      });
+      return stream;
+    }
   } catch (error) {
     console.error("Gemini: Chat Completion Error", error);
     throw error;
