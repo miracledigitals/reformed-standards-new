@@ -35,7 +35,7 @@ export const chatCompletion = async (messages: { role: 'user' | 'assistant' | 's
         }));
 
         const stream = await ai.models.generateContentStream({
-            model: 'gemini-3.1',
+            model: 'gemini-3.5-flash',
             contents,
             config: {
                 systemInstruction: systemMessage?.content || INITIAL_SYSTEM_INSTRUCTION,
@@ -61,7 +61,7 @@ export const generateText = async (prompt: string, systemInstruction?: string, t
         console.log("Gemini: Starting generate text request...");
 
         const result = await ai.models.generateContent({
-            model: 'gemini-3.1',
+            model: 'gemini-3.5-flash',
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             config: {
                 systemInstruction: fullSystemInstruction,

@@ -30,7 +30,7 @@ export const getGeminiClient = (): GoogleGenAI => {
 export const createChatSession = (): Chat => {
   const ai = getGeminiClient();
   return ai.chats.create({
-    model: 'gemini-3.1',
+    model: 'gemini-3.5-flash',
     config: {
       systemInstruction: INITIAL_SYSTEM_INSTRUCTION,
       temperature: 0.1,
