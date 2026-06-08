@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Search, ArrowRight, BookOpen, Loader2, ChevronRight, Tag } from 'lucide-react';
-import { generateText } from '../services/geminiService';
+import { generateText, safeParseJSON } from '../services/geminiService';
 import { INITIAL_SYSTEM_INSTRUCTION } from '../constants';
 import ReactMarkdown from 'react-markdown';
 import { commonMarkdownComponents } from './MarkdownComponents';
@@ -108,15 +108,16 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({ isOpen, onClose }) => 
 
       const text = result.text;
       if (text) {
-        const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
-        const data = JSON.parse(cleanText) as SearchResponse;
+        const data = safeParseJSON<SearchResponse | SearchResult[]>(text);
 
         if (Array.isArray(data)) {
           setResults(data);
           setRelatedTerms([]);
-        } else {
+        } else if (data && typeof data === 'object') {
           setResults(data.results || []);
           setRelatedTerms(data.relatedTerms || []);
+        } else {
+          console.warn("QuickSearch: Unexpected response format", text.substring(0, 200));
         }
       }
     } catch (error) {
@@ -305,7 +306,7 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({ isOpen, onClose }) => 
 
         <div className="bg-reformed-100 dark:bg-reformed-950 p-2 border-t border-reformed-200 dark:border-reformed-800 flex justify-end shrink-0">
           <span className="text-[10px] text-reformed-400 dark:text-reformed-600 font-sans mr-2">
-            Powered by Llama AI • Verified against original standards
+            Powered by Gemini AI • Verified against original standards
           </span>
         </div>
       </div>

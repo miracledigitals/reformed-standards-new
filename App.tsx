@@ -18,6 +18,7 @@ import { HistoricalTimeline } from './components/HistoricalTimeline';
 import { ParallelComparison } from './components/ParallelComparison';
 import { CrossReferenceVisualizer } from './components/CrossReferenceVisualizer';
 import { MenuFooter } from './components/MenuFooter';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Confession, BibleVersion, Hymn } from './types';
 import { Sparkles, ArrowUp } from 'lucide-react';
 import { BIBLE_VERSIONS, CONFESSIONS, HYMNS } from './constants';
@@ -335,6 +336,7 @@ const App: React.FC = () => {
       />
 
       <main className="flex-1 w-full max-w-[100vw] overflow-hidden pb-16 sm:pb-20">
+        <ErrorBoundary>
         <AnimatePresence mode="wait">
           {activeView === 'library' && (
             <motion.div
@@ -548,6 +550,7 @@ const App: React.FC = () => {
             </motion.div>
           )}
         </AnimatePresence>
+        </ErrorBoundary>
       </main>
 
       {/* Floating Action Button - Rendered only when NOT in chat view */}

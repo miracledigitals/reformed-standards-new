@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { generateText } from '../services/geminiService';
+import { generateText, safeParseJSON } from '../services/geminiService';
 import { LoadingState } from '../types';
 import { Search, Share2, Loader2, Sparkles, Book, Scroll, ChevronRight, Bookmark, Copy, Check, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -67,8 +67,12 @@ export const CrossReferenceVisualizer: React.FC = () => {
 
       const text = result.text;
       if (text) {
-        const data = JSON.parse(text);
-        setResults(data);
+        const data = safeParseJSON<CrossRefResult[]>(text);
+        if (Array.isArray(data)) {
+          setResults(data);
+        } else {
+          console.warn("Cross-Reference: Unexpected response format", text.substring(0, 200));
+        }
       }
     } catch (error) {
       console.error("Cross-Reference Visualizer Error:", error);

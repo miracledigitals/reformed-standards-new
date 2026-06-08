@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { X, BookOpen, Scroll, Link, Loader2, ExternalLink, Globe, Languages, RotateCcw } from 'lucide-react';
-import { generateText } from '../services/geminiService';
+import { generateText, safeParseJSON } from '../services/geminiService';
 import ReactMarkdown from 'react-markdown';
 import { commonMarkdownComponents } from './MarkdownComponents';
 import { BIBLE_APPS } from '../services/bibleLinkService';
@@ -59,7 +59,7 @@ export const ScriptureModal: React.FC<ReferenceModalProps> = ({ reference, text,
           );
 
           if (result.text) {
-            const data = JSON.parse(result.text);
+            const data = safeParseJSON<string[]>(result.text);
             if (Array.isArray(data)) {
               setCrossRefs(data);
             }
