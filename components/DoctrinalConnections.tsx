@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { DOCTRINAL_CONNECTIONS } from '../constants';
 import { ConnectionType, DoctrinalCategory } from '../types';
 import { ArrowRight, RotateCcw, Filter, Network, Scale, ShieldCheck, ArrowLeft, Loader2, Scroll, Printer, ChevronRight, Bookmark, Copy, Check } from 'lucide-react';
-import { generateText } from '../services/groqService';
+import { generateText } from '../services/geminiService';
 import ReactMarkdown from 'react-markdown';
 import { commonMarkdownComponents } from './MarkdownComponents';
 import { saveItem, isItemSaved, removeItem, getSavedItems } from '../services/storageService';

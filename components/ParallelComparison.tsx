@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { CONFESSIONS } from '../constants';
 import { Confession, LoadingState } from '../types';
-import { generateText } from '../services/groqService';
+import { generateText } from '../services/geminiService';
 // Added ChevronDown to imports to fix "Cannot find name 'ChevronDown'" errors
 import { GitCompare, ArrowRight, Loader2, Sparkles, BookOpen, Scroll, ChevronDown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';

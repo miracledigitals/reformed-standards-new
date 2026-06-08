@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Search, ArrowRight, BookOpen, Loader2, ChevronRight, Tag } from 'lucide-react';
-import { generateText } from '../services/groqService';
+import { generateText } from '../services/geminiService';
 import { INITIAL_SYSTEM_INSTRUCTION } from '../constants';
 import ReactMarkdown from 'react-markdown';
 import { commonMarkdownComponents } from './MarkdownComponents';

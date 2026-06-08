@@ -4,7 +4,7 @@ import { CONFESSIONS } from '../constants';
 import { Confession } from '../types';
 import { Book, Calendar, Users, ArrowRight, ChevronDown, RotateCcw, Search, Bookmark, Check, CloudDownload, Loader2 } from 'lucide-react';
 import { saveItem, isItemSaved, removeItem, getSavedItems } from '../services/storageService';
-import { generateText } from '../services/groqService';
+import { generateText } from '../services/geminiService';
 import { motion, Variants } from 'framer-motion';
 
 interface LibraryProps {
@@ -190,9 +190,9 @@ export const Library: React.FC<LibraryProps> = ({ onSelectConfession, onViewChan
           Explore the historic documents of the Reformed faith. Select a document to begin studying.
         </p>
 
-        <div className="max-w-3xl mx-auto mb-10">
-          <div className="bg-white dark:bg-reformed-900 rounded-2xl border border-reformed-200 dark:border-reformed-800 shadow-sm overflow-hidden">
-            <div className="bg-reformed-50 dark:bg-reformed-900/40 px-6 py-5 border-b border-reformed-200 dark:border-reformed-800 flex items-center justify-between">
+        <div className="max-w-3xl mx-auto mb-10 animate-fade-in-up">
+          <div className="glass-card rounded-2xl overflow-hidden shadow-sm">
+            <div className="bg-reformed-100/50 dark:bg-reformed-950/50 px-6 py-5 border-b border-reformed-200 dark:border-reformed-800/50 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-reformed-800 text-white rounded-full">
                   <Book className="w-4 h-4" />
@@ -270,14 +270,13 @@ export const Library: React.FC<LibraryProps> = ({ onSelectConfession, onViewChan
               className="relative group h-full"
               layout
             >
-              {/* Card */}
               <motion.div
-                className="bg-white dark:bg-reformed-900 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-reformed-200 dark:border-reformed-800 overflow-hidden flex flex-col h-full cursor-pointer touch-manipulation transform-gpu"
+                className="glass-card rounded-2xl overflow-hidden flex flex-col h-full cursor-pointer touch-manipulation transform-gpu shadow-sm"
                 onClick={() => onSelectConfession(confession)}
                 whileHover={{ y: -5 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="bg-reformed-50 dark:bg-reformed-800/50 p-6 border-b border-reformed-100 dark:border-reformed-800 lg:group-hover:bg-reformed-100 lg:dark:group-hover:bg-reformed-800 transition-colors relative">
+                <div className="bg-reformed-100/50 dark:bg-reformed-950/50 p-6 border-b border-reformed-200/50 dark:border-reformed-800/50 lg:group-hover:bg-reformed-200/30 lg:dark:group-hover:bg-reformed-900/30 transition-colors relative">
 
                   {/* Action Buttons */}
                   <div className="absolute top-4 right-4 flex items-center gap-1">
@@ -324,7 +323,7 @@ export const Library: React.FC<LibraryProps> = ({ onSelectConfession, onViewChan
                   </div>
                 </div>
 
-                <div className="p-6 flex-grow flex flex-col justify-between bg-white dark:bg-reformed-900 transition-colors">
+                <div className="p-6 flex-grow flex flex-col justify-between transition-colors">
                   <p className="text-reformed-700 dark:text-reformed-300 font-serif text-sm leading-relaxed mb-6 line-clamp-3">
                     {confession.description}
                   </p>

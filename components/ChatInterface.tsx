@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Confession, Message, LoadingState, BibleVersion, Hymn, GroundingMetadata } from '../types';
-import { chatCompletion, getGroqClient } from '../services/groqService';
+import { chatCompletion } from '../services/geminiService';
 import { Send, BookOpen, RotateCcw, Sparkles, X, Music, Globe, Check, Menu, ChevronLeft, Info, ChevronDown, ChevronUp, List, Scroll, Network } from 'lucide-react';
 import { ScriptureModal } from './ScriptureModal';
 import { getConfessionNavigation, NavItem, DOCTRINAL_CONNECTIONS, INITIAL_SYSTEM_INSTRUCTION } from '../constants';
@@ -143,7 +143,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
       let fullResponse = '';
 
       for await (const chunk of stream) {
-        const content = chunk.choices[0]?.delta?.content || "";
+        const content = chunk.text || "";
         fullResponse += content;
 
         setMessages(prev => {
@@ -191,7 +191,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ activeConfession, 
 
       let fullResponse = '';
       for await (const chunk of stream) {
-        fullResponse += chunk.choices[0]?.delta?.content || "";
+        fullResponse += chunk.text || "";
         setModalData(prev => prev ? { ...prev, text: fullResponse } : null);
       }
       setModalData(prev => prev ? { ...prev, loading: false } : null);

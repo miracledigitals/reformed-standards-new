@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { generateText } from '../services/groqService';
+import { generateText } from '../services/geminiService';
 import { AUGUSTINE_CONFESSIONS_SYSTEM_INSTRUCTION } from '../constants';
 import ReactMarkdown from 'react-markdown';
 import { Scroll, Calendar, Copy, RotateCcw, Bookmark, Check } from 'lucide-react';

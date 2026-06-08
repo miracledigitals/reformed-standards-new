@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { generateText } from '../services/groqService';
+import { generateText } from '../services/geminiService';
 import { STUDY_SYSTEM_INSTRUCTION, THEOLOGICAL_TOPICS } from '../constants';
 import ReactMarkdown from 'react-markdown';
 import { GraduationCap, Calendar, RotateCcw, BookOpen, Scroll, PenTool, Bookmark, Check, Copy } from 'lucide-react';

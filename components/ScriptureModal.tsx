@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { X, BookOpen, Scroll, Link, Loader2, ExternalLink, Globe, Languages, RotateCcw } from 'lucide-react';
-import { generateText } from '../services/groqService';
+import { generateText } from '../services/geminiService';
 import ReactMarkdown from 'react-markdown';
 import { commonMarkdownComponents } from './MarkdownComponents';
 import { BIBLE_APPS } from '../services/bibleLinkService';

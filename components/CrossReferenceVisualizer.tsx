@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { generateText } from '../services/groqService';
+import { generateText } from '../services/geminiService';
 import { LoadingState } from '../types';
 import { Search, Share2, Loader2, Sparkles, Book, Scroll, ChevronRight, Bookmark, Copy, Check, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';

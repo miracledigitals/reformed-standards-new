@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { SYSTEMATIC_THEOLOGY_STRUCTURE } from '../constants';
 import { ChevronRight, ChevronDown, BookOpen, Layers, Menu, X, Loader2, Bookmark, Check, Copy } from 'lucide-react';
-import { generateText } from '../services/groqService';
+import { generateText } from '../services/geminiService';
 import ReactMarkdown from 'react-markdown';
 import { commonMarkdownComponents } from './MarkdownComponents';
 import { saveItem, isItemSaved, removeItem, getSavedItems } from '../services/storageService';
@@ -60,7 +60,6 @@ export const SystematicTheologyBrowser: React.FC = () => {
                 return;
             }
 
-            const ai = getGeminiClient();
             const prompt = `
             Provide a comprehensive theological summary of "${topic}" from a strictly Reformed perspective.
             
@@ -80,8 +79,6 @@ export const SystematicTheologyBrowser: React.FC = () => {
             ## 4. Key Distinctions
             Clarify any common misunderstandings or distinctions (e.g., distinguishing this from Roman Catholic or Arminian views).
         `;
-
-            const safetySettings = [...DEFAULT_SAFETY_SETTINGS];
 
             let text: string | undefined;
 
